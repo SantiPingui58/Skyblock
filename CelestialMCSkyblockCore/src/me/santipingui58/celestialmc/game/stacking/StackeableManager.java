@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -41,8 +42,24 @@ public class StackeableManager implements Listener {
 		 }
 	 }
 	 
+	 public void removeSimpleBlock(SimpleBlock sblock) {
+		 StackeableManager.getManager().getSimpleBlocks().remove(sblock);
+		 if (sblock.getIsland()!=null) {
+			 sblock.getIsland().getBlocks().remove(sblock);
+		 }
+	 }
+	 
 	 public boolean thereIsStackedBlockAtLocation(Location l) {
 		 for (StackedBlock sblock : StackeableManager.getManager().getStackedBlocks()) {
+			 if (sblock.getLocation().equals(l)) {
+				 return true;
+			 }
+		 } 
+		 return false;
+	 }
+	 
+	 public boolean thereIsSimpleBlockAtLocation(Location l) {
+		 for (SimpleBlock sblock : StackeableManager.getManager().getSimpleBlocks()) {
 			 if (sblock.getLocation().equals(l)) {
 				 return true;
 			 }
@@ -60,6 +77,15 @@ public class StackeableManager implements Listener {
 	 }
 	 
 	 
+	 public SimpleBlock getSimpleBlockAt(Location l) {
+		 for (SimpleBlock sblock : StackeableManager.getManager().getSimpleBlocks()) {
+			 if (sblock.getLocation().equals(l)) {
+				 return sblock;
+			 }
+		 } 
+		 return null;
+	 }
+	 
 	 @EventHandler 
 	 public void onInteract(PlayerInteractEvent e) {
 		 if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
@@ -74,6 +100,9 @@ public class StackeableManager implements Listener {
 					 StackedBlock sblock = StackeableManager.getManager().getStackedBlockAt(e.getClickedBlock().getLocation());	
 					 sblock.setAmount(sblock.getAmount()+1);
 				 } else {
+					 if (thereIsSimpleBlockAtLocation(e.getClickedBlock().getLocation())) {
+						 removeSimpleBlock(StackeableManager.getManager().getSimpleBlockAt(e.getClickedBlock().getLocation()));
+					 }
 					 StackedBlock sblock = new StackedBlock(UUID.randomUUID(),block,e.getClickedBlock().getLocation(),2);
 					 StackeableManager.getManager().getStackedBlocks().add(sblock);
 				 }
@@ -106,9 +135,22 @@ public class StackeableManager implements Listener {
 				 e.setCancelled(true);
 				 e.getBlock().setType(Material.AIR);
 				 
+			 } else if (StackeableManager.getManager().thereIsSimpleBlockAtLocation(e.getBlock().getLocation())) {
+				 SimpleBlock sblock = StackeableManager.getManager().getSimpleBlockAt(e.getBlock().getLocation());
+				 removeSimpleBlock(sblock);
 			 }
 		 }
 	 }
 	 
+	 @EventHandler
+	 public void onPlace(BlockPlaceEvent e) {
+		 if (StackeableBlockType.fromMaterial(e.getBlock().getType())!=null) {
+			 if (!StackeableManager.getManager().thereIsStackedBlockAtLocation(e.getBlock().getLocation())) {
+				 StackeableBlockType type = StackeableBlockType.fromMaterial(e.getBlock().getType());
+				 SimpleBlock sblock = new SimpleBlock(UUID.randomUUID(),type,e.getBlock().getLocation());
+				 StackeableManager.getManager().getSimpleBlocks().add(sblock);
+			 }
+		 }
+	 }
 	 
 }

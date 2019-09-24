@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 
+
 import me.santipingui58.celestialmc.game.CelestialPlayer;
 
 public class CelestialChest {
@@ -65,8 +66,11 @@ public class CelestialChest {
 	public int getTimesUsed() {
 		return this.used;
 	}
-	
+
 	public void setTimesUsed(int i) {
 		this.used = i;
 	}
+
+	
+	
 }

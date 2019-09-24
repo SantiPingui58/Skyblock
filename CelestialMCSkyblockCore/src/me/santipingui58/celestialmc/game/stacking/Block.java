@@ -12,13 +12,11 @@ public class Block {
 	private UUID uuid;
 	private StackeableBlockType type;
 	private Location location;
-	private int amount;
 	SkyblockIsland island;
-	public Block(UUID uuid,StackeableBlockType type, Location location, int amount) {
+	public Block(UUID uuid,StackeableBlockType type, Location location) {
 		this.uuid = uuid;
 		this.type = type;
 		this.location = location;
-		this.amount = amount;	
 		SkyblockIsland island = SkyblockManager.getManager().getIslandByLocation(location);
 		if (island!=null) {
 			this.island = island;
@@ -40,12 +38,6 @@ public class Block {
 		return this.location;
 	}
 	
-	public int getAmount() {
-		return this.amount;
-	}
-
-	public void setAmount(int i) {
-		this.amount = i;
-	}
+	
 	
 } 

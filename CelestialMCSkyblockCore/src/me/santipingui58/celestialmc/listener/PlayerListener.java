@@ -43,7 +43,7 @@ public class PlayerListener implements Listener {
 	        	if (cplayer.getLocation().equals(PlayerLocation.OWN_ISLAND)) {
 	        		SkyblockManager.getManager().homeTeleport(cplayer,null);
 	        	}  else {
-	        	Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true);
+	        	Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,true);
 	   		 cplayer.setLocation(PlayerLocation.SPAWN);
 	   		 p.teleport(spawn);
 	        	}

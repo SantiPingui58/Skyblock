@@ -1,4 +1,4 @@
-package me.santipingui58.celestialmc.spawner;
+package me.santipingui58.celestialmc.game.spawner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -21,9 +22,13 @@ public class CelestialSpawner {
 	private SpawnerType type;
 	private UUID uuid;
 	private boolean isactived;
-	private List<CelestialSpawner> spawners = new ArrayList<CelestialSpawner>();
-	private CelestialSpawner current;
-	private int maxspawnersallowed;
+	
+	
+	private int level;
+
+	private int spawnedmobs;
+	
+	private List<CelestialSpawner> stackedspawners = new ArrayList<CelestialSpawner>();
 	
 	public CelestialSpawner(UUID uuid, CelestialPlayer owner, Location location, SpawnerType type) {
 		if (uuid==null) {
@@ -35,21 +40,29 @@ public class CelestialSpawner {
 		this.owner = owner;
 		this.location = location;
 		this.type = type;
-		this.maxspawnersallowed = 3;
+		this.level = 1;
 	}
 	
-	public List<CelestialSpawner> getSpawners() {
-		return this.spawners;
-	}
-	public int getMaxSpawnersAllowed() {
-		return this.maxspawnersallowed;
-	}
-	public CelestialSpawner getCurrent() {
-		return this.current;
+	
+	public List<CelestialSpawner> getStackedSpawners() {
+		return this.stackedspawners;
 	}
 	
-	public void setCurrent(CelestialSpawner spawner) {
-		this.current = spawner;
+	public int getSpawnedMobs() {
+		return this.spawnedmobs;
+	}
+	
+	public void setSpawnedMobs(int i) {
+		this.spawnedmobs = i;
+	}
+	public int getLevel() {
+		return this.level;
+	}
+	
+	public void levelUp( ) {
+		if (this.level<4) {
+			this.level = this.level+1;
+		}
 	}
 	public UUID getUUID() {
 		return this.uuid;
@@ -99,13 +112,7 @@ public class CelestialSpawner {
 		type = type.replace("_", " ");
 		return type;
 	}
-	
-	public CelestialSpawner getNext(CelestialSpawner uid) {
-	    int idx = this.spawners.indexOf(uid);
-	    if (idx < 0 || idx+1 == this.spawners.size()) return null;
-	    return this.spawners.get(idx + 1);
-	}
-	
+		
 	public ItemStack getItem() {
 		ItemStack item = new ItemStack(Material.SPAWNER);
 		ItemMeta meta = item.getItemMeta();
@@ -113,7 +120,10 @@ public class CelestialSpawner {
 		lore.add("§7Place this spawner do to ");
 		lore.add("§7spawner stuff.");
 		lore.add(" ");
-		lore.add("§cOwner: §3" + Bukkit.getOfflinePlayer(getOwner().getUUID()).getName());
+		lore.add("§3§lLevel: " + this.level);
+		lore.add("§7Spawners stacked: " + this.stackedspawners.size());
+		lore.add(" ");
+		lore.add("§cOriginal Owner: §3" + Bukkit.getOfflinePlayer(getOwner().getUUID()).getName());
 		lore.add(" ");
 		lore.add("§8"+getUUID().toString());
 		lore.add(" ");
@@ -123,5 +133,62 @@ public class CelestialSpawner {
 		meta.setDisplayName("§c§l" + getTitle() + " Spawner");
 		item.setItemMeta(meta);
 		return item;
+	}
+	
+	public void updateSpawnerData() {
+		 CreatureSpawner creaturespawner = (CreatureSpawner) this.location.getBlock().getState();			 
+		 creaturespawner.setSpawnedType(this.type.toEntityType());
+		 int ticks = (int) (getDelay()*20);
+		 if (ticks>0) {
+			 creaturespawner.setMaxSpawnDelay(ticks);
+			 creaturespawner.setMinSpawnDelay(ticks);
+		 } else {
+			 creaturespawner.setMaxSpawnDelay(1);
+			 creaturespawner.setMinSpawnDelay(1);
+		 }
+		 creaturespawner.setRequiredPlayerRange(getRange());
+		 creaturespawner.setSpawnCount(getSpawnCount());
+		 creaturespawner.update();
+	}
+	
+	public double getDelay() {
+		 double s = this.getStackedSpawners().size()*0.25;
+		 int delay = 60;
+		 double t = delay-s;
+		 if (this.level==2) {
+			 t = t*0.1;
+		 } else if (this.level==3) {
+			 t=t*0.25;
+		 } else if (this.level==4) {
+			 t=t*0.5;
+		 }
+		 if (t<0) {
+			 t = 0.1;
+		 }
+		return Math.floor(t * 100) / 100;
+	}
+	
+	public int getRange() {
+		 int range = 10;
+		 if (this.level==2) {
+			 range = 15;
+		 } else if (this.level==3) {
+			 range = 20;
+		 } else if (this.level==4) {
+			 range = 30;
+		 }
+		 return range;
+	}
+	
+	public int getSpawnCount() {
+		int spawncount = 1;	 
+		 if (this.level==2) {
+			 spawncount = 3;
+		 } else if (this.level==3) {
+			 spawncount=5;
+		 } else if (this.level==4) {
+			 spawncount=10;
+		 }
+		 return spawncount;
 	}
 }

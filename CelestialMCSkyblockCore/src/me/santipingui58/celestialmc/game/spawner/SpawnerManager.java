@@ -1,12 +1,12 @@
-package me.santipingui58.celestialmc.spawner;
+package me.santipingui58.celestialmc.game.spawner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.CelestialPlayer;
 import me.santipingui58.celestialmc.gui.spawner.SpawnerMenu;
-
 public class SpawnerManager implements Listener {
 
 	
@@ -52,12 +51,52 @@ public class SpawnerManager implements Listener {
 		 }
 		 return null;
 	 }
+	 
+	 public CelestialSpawner getSpawnerAt(Location l) {
+		 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
+			 if (spawner.getLocation().equals(l)) {
+				 return spawner;
+			 }
+		 }
+		 return null;
+	 }
 	
 	 @EventHandler
 	 public void onInteract(PlayerInteractEvent e) {
 		 Player p = e.getPlayer();
 		 if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 		 if (e.getClickedBlock().getType().equals(Material.SPAWNER)) {
+			 if (e.getItem()!=null) {
+			 if (e.getItem().getType().equals(Material.SPAWNER)) {
+				 ItemStack item = e.getItem();
+				 if (item.getItemMeta().hasLore() && item.getItemMeta().getLore().size()>0) {
+					 String string = ChatColor.stripColor(item.getItemMeta().getLore().get(8));
+					 try {
+						 UUID uuid = UUID.fromString(string);
+						 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
+							 if (spawner.getUUID().toString().equalsIgnoreCase(uuid.toString())) {
+								 CelestialSpawner clickedspawner = SpawnerManager.getManager().getSpawnerAt(e.getClickedBlock().getLocation());
+								 if (clickedspawner.getType().equals(spawner.getType()) && clickedspawner.getLevel()==spawner.getLevel()) {
+									 clickedspawner.getStackedSpawners().add(spawner);
+									 item.setAmount(item.getAmount()-1);
+									 e.setCancelled(true);
+									 return;
+									
+								 } else {
+									 p.sendMessage(Main.skyblock_prefix +" §cYou can stack only spawners from same level and same mob!");
+									 e.setCancelled(true);
+									 return;
+								 }
+								 
+							 }
+						 }
+						 
+					 } catch (Exception ex) {
+					 }
+				 } 
+			 } 
+			 }
+			 
 			 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
 				 if (spawner.isPlaced()) {
 				 if (spawner.getLocation().equals(e.getClickedBlock().getLocation())) {
@@ -66,7 +105,7 @@ public class SpawnerManager implements Listener {
 				 }
 				 } 
 			 }
-	 }
+		 }
 		 }
 	 }
 	 
@@ -75,15 +114,13 @@ public class SpawnerManager implements Listener {
 		 if (e.getItemInHand().getType().equals(Material.SPAWNER)) {
 			 ItemStack item = e.getItemInHand();
 			 if (item.getItemMeta().getLore().size()>0) {
-				 String string = ChatColor.stripColor(item.getItemMeta().getLore().get(5));			
+				 String string = ChatColor.stripColor(item.getItemMeta().getLore().get(8));			
+				 try {
 				 UUID uuid = UUID.fromString(string);
 		 for (CelestialSpawner spawner: SpawnerManager.getManager().getSpawners()) {
 			 if (spawner.getUUID().toString().equalsIgnoreCase(uuid.toString())) {
 				 spawner.place(e.getBlock().getLocation());
-				 CreatureSpawner creaturespawner = (CreatureSpawner) e.getBlock().getState();			 
-				 creaturespawner.setSpawnedType(spawner.getType().toEntityType());
-				 creaturespawner.update();
-				 
+				spawner.updateSpawnerData();			 
 				 e.getPlayer().sendMessage(Main.skyblock_prefix+ " §aYou have placed an Spawner!");
 				 if (e.getPlayer().getInventory().contains(spawner.getItem())) {
 					 e.getPlayer().getInventory().remove(spawner.getItem());
@@ -91,6 +128,7 @@ public class SpawnerManager implements Listener {
 				 return;
 			 } 
 		 }
+		 } catch (Exception ex) {}
 			 } 
 	 }
 	 }
@@ -116,27 +154,15 @@ public class SpawnerManager implements Listener {
 	 
 	 @EventHandler
 	 public void onSpawn(SpawnerSpawnEvent e) {
-		for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
-			if (spawner.isPlaced()) {
-				if (spawner.getLocation().equals(e.getSpawner().getBlock().getLocation())) {
-					if (!spawner.isActivated()) {
-						e.setCancelled(true);
-					} else {					
-						CreatureSpawner creaturespawner = e.getSpawner();
-						if (spawner.getCurrent()!=null) {
-						creaturespawner.setSpawnedType(spawner.getCurrent().getType().toEntityType());	
-						}
-						if (!spawner.getSpawners().isEmpty()) {
-							if (spawner.getCurrent()==null) {
-								spawner.setCurrent(spawner);
-							} else {
-								spawner.setCurrent(spawner.getNext(spawner.getCurrent()));
-							}
-						}
+		 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
+				if (spawner.isPlaced()) {
+					if (spawner.getLocation().equals(e.getSpawner().getBlock().getLocation())) {
+						if (!spawner.isActivated()) {
+							e.setCancelled(true);
+							return;
+						} 
 					}
-					return;
 				}
 			}
-		}
-	 }
+		 }
 }

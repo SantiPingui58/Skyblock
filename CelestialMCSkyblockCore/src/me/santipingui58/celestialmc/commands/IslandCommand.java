@@ -105,7 +105,7 @@ public class IslandCommand implements CommandExecutor {
 			 } else if (args[0].equalsIgnoreCase("delete")) {
 				 if (cplayer.hasIsland()) {
 					 if (cplayer.getLocation().equals(PlayerLocation.OWN_ISLAND) && cplayer.getPlayer().getWorld().getName().equalsIgnoreCase("skyblock")) {
-						 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true); 
+						 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,true); 
 						 cplayer.getPlayer().teleport(spawn);
 					 } 
 					 DataManager.getManager().deleteIsland(cplayer.getIsland());

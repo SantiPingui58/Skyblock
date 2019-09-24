@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import me.santipingui58.celestialmc.game.stacking.SimpleBlock;
 import me.santipingui58.celestialmc.game.stacking.StackeableBlockType;
 import me.santipingui58.celestialmc.game.stacking.StackedBlock;
 
@@ -53,6 +54,19 @@ public class WorthManager {
 			}
 			
 		}
+		for (SimpleBlock sblock : island.getBlocks()) {
+			for (StackeableBlockType type : StackeableBlockType.values()) {
+				if (sblock.getType().equals(type)) {
+					if (hashmap.containsKey(type)) {
+						int i = hashmap.get(type) + 1;
+						hashmap.remove(type);
+						hashmap.put(type, i);
+					} else {
+						hashmap.put(type, 1);
+					}
+				}
+			}
+		}
 		return hashmap;
 		
 	}
@@ -62,6 +76,12 @@ public class WorthManager {
 		for (StackedBlock sblock : island.getStackedBlocks()) {
 			if (sblock.getType().equals(type)) {
 				amount = amount + sblock.getAmount();
+			}
+		}
+		
+		for (SimpleBlock sblock : island.getBlocks()) {
+			if (sblock.getType().equals(type)) {
+				amount++;
 			}
 		}
 		return amount;

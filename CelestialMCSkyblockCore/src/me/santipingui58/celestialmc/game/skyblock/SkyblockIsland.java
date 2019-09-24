@@ -131,6 +131,11 @@ public class SkyblockIsland {
 	public List<CelestialPlayer> getMembers() {
 		return this.members;
 	}
+	public List<CelestialPlayer> getMembersAndOwner() {
+		List<CelestialPlayer> list = this.members;
+		list.add(this.owner);
+		return list;
+	}
 	
 	public int getMaxPlayersLevel() {
 		return this.maxplayers;

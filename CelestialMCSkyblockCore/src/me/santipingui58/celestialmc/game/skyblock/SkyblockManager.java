@@ -213,7 +213,7 @@ public class SkyblockManager {
 		}
 		
 		if (member.isOnline()) {
-			Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true);
+			Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,false);
 			member.getPlayer().teleport(spawn);
 			if (kicked) {
 				member.getPlayer().sendMessage(Main.skyblock_prefix+"§c You have been kicked from the Skyblock Island of §b" + island.getOwner().getOfflinePlayer().getName());

@@ -30,12 +30,12 @@ public class PlayerConnectEvent implements Listener {
 			cplayer = DataManager.getManager().createPlayerData(p.getUniqueId());
 			
 		}
-		
+				
 		FastBoard board = new FastBoard(p);
 		board.updateTitle("§a§lCelestialMC");		 
 		PinguiScoreboard.getScoreboard().getPlayerScoreboards().put(cplayer, board);
 		 if (cplayer.getLocation().equals(PlayerLocation.SPAWN)) {
-			 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true);
+			 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,true);
 			 p.teleport(spawn);
 		 } else if (cplayer.getLocation().equals(PlayerLocation.OWN_ISLAND)) {
 			 p.teleport(cplayer.getIsland().getHome());

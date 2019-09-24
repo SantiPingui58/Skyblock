@@ -29,18 +29,22 @@ public class Utils {
 			  return list;
 	  }
 
-	  public static Location getLoc(String path, boolean pitch)
+	  public static Location getLoc(String path, boolean pitch,boolean add)
 	  {
 	    Location loc = null;
 	    if (!pitch) {
 	      String[] locs = path.split(",");
 	      loc = new Location(Bukkit.getWorld(locs[0]), Integer.parseInt(locs[1]), Integer.parseInt(locs[2]), Integer.parseInt(locs[3]));
+	      if (add) {
 	      loc.add(0.5D, 0.0D, 0.5D);
+	      }
 	      return loc;
 	    }
 	    String[] locs = path.split(",");
 	    loc = new Location(Bukkit.getWorld(locs[0]), Integer.parseInt(locs[1]), Integer.parseInt(locs[2]), Integer.parseInt(locs[3]), Float.valueOf(locs[4]).floatValue(), Float.valueOf(locs[5]).floatValue());
+	    if (add) {
 	    loc.add(0.5D, 0.0D, 0.5D);
+	    }
 	    return loc;
 	  }
 
@@ -49,7 +53,6 @@ public class Utils {
 	    String[] locs = path.split(",");
 
 	    Location loc = new Location(Bukkit.getWorld(locs[0]), Integer.parseInt(locs[1]), Integer.parseInt(locs[2]), Integer.parseInt(locs[3]));
-	    loc.add(0.5D, 0.0D, 0.5D);
 	    return loc;
 	  }
 	  
@@ -60,10 +63,6 @@ public class Utils {
 		  p.sendMessage(s);
 	  }
 	  
-	  public static String getPluginPrefix() {
-		return "§e[§5§lSpleefCTF§e] §f";
-		  
-	  }
 	  
 	  
 	  public static Location getCenter(Location loc) {

@@ -63,8 +63,7 @@ public class PinguiScoreboard {
 				 if (provider != null) {
 				      api = provider.getProvider();
 				     
-				 }
-				 
+				 }			 
 				 User user = api.getUser(p.getUniqueId());
 				 MetaData metaData = user.getCachedData().getMetaData(Contexts.allowAll());
 				 String prefix = metaData.getPrefix();
@@ -73,6 +72,22 @@ public class PinguiScoreboard {
 					 scoreboard.getTeam("dev").addPlayer(p);
 				 } else if (prefix.contains("OWNER")) {
 					 scoreboard.getTeam("owner").addPlayer(p);
+				 } else if (prefix.contains("Celestial")) {
+					 scoreboard.getTeam("celestial").addPlayer(p);
+				 } else if (prefix.contains("Saint")) {
+					 scoreboard.getTeam("saint").addPlayer(p);
+				 }else if (prefix.contains("Venerate")) {
+					 scoreboard.getTeam("venerate").addPlayer(p);
+				 }else if (prefix.contains("Ancestor")) {
+					 scoreboard.getTeam("ancestor").addPlayer(p);
+				 }else if (prefix.contains("Emperor")) {
+					 scoreboard.getTeam("emperor").addPlayer(p);
+				 }else if (prefix.contains("GrandMaster")) {
+					 scoreboard.getTeam("grandmaster").addPlayer(p);
+				 }else if (prefix.contains("Master")) {
+					 scoreboard.getTeam("master").addPlayer(p);
+				 }else if (prefix.contains("Disciple")) {
+					 scoreboard.getTeam("disciple").addPlayer(p);
 				 } else {
 					 scoreboard.getTeam("def").addPlayer(p);
 				 }

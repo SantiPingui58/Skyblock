@@ -26,7 +26,7 @@ public class AutoBlockChest extends CelestialChest {
 		lore.add("§7turn all items inside it into their");
 		lore.add("§7crafted block version.");
 		lore.add(" ");
-		lore.add("§cOwner: §3" + Bukkit.getOfflinePlayer(getOwner().getUUID()).getName());
+		lore.add("§cOriginal Owner: §3" + Bukkit.getOfflinePlayer(getOwner().getUUID()).getName());
 		lore.add("§aBlocks crafted: §3" + this.getTimesUsed());
 		lore.add(" ");
 		lore.add("§8"+getUUID().toString());

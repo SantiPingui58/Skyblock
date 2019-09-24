@@ -5,7 +5,7 @@ import org.bukkit.Material;
 public enum StackeableBlockType {
 	
 	BEDROCK,END_PORTAL,DRAGON_EGG,BEACON,DRAGON_HEAD,WITHER_HEAD,CREEPER_HEAD,SKELETON_HEAD,ZOMBIE_HEAD,PLAYER_HEAD,GLOWSTONE,DIAMOND_BLOCK,EMERALD_BLOCK,
-	MAGMA_BLOCK,SPAWNERS,TNT,ENCHANTING_TABLE,SPONGE,BLUE_ICE,SEA_LANTERN,PACKED_ICE,ANVIL,GOLD_BLOCK,IRON_BLOCK,BOOKSHELF,REDSTONE_BLOCK,LAPIS_BLOCK,
+	MAGMA_BLOCK,TNT,ENCHANTING_TABLE,SPONGE,BLUE_ICE,SEA_LANTERN,PACKED_ICE,ANVIL,GOLD_BLOCK,IRON_BLOCK,BOOKSHELF,REDSTONE_BLOCK,LAPIS_BLOCK,
 	OBSIDIAN,SOUL_SAND,PURPUR,HAY_BLOCK;
 	
 	public Material toMaterial() {
@@ -35,8 +35,6 @@ public enum StackeableBlockType {
 			return Material.EMERALD_BLOCK;
 		} else if (this.equals(MAGMA_BLOCK)) {
 			return Material.MAGMA_BLOCK;
-		} else if (this.equals(SPAWNERS)) {
-			return Material.SPAWNER;
 		} else if (this.equals(TNT)) {
 			return Material.TNT;
 		} else if (this.equals(ENCHANTING_TABLE)) {
@@ -102,9 +100,7 @@ public enum StackeableBlockType {
 			return EMERALD_BLOCK;
 		} else if (material.equals(Material.MAGMA_BLOCK)) {
 			return MAGMA_BLOCK;
-		} else if (material.equals(Material.SPAWNER)) {
-			return SPAWNERS;
-		} else if (material.equals(Material.TNT)) {
+		}  else if (material.equals(Material.TNT)) {
 			return TNT;
 		} else if (material.equals(Material.ENCHANTING_TABLE)) {
 			return ENCHANTING_TABLE;

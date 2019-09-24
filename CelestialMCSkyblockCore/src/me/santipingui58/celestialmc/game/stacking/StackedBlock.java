@@ -13,11 +13,13 @@ import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
 
 public class StackedBlock extends Block{
 
+	private int amount;
 	private int oldamount;
 	private Hologram hologram;
 	
 	public StackedBlock(UUID uuid,StackeableBlockType type, Location location, int amount) {
-		super(uuid,type,location,amount);
+		super(uuid,type,location);
+		this.amount = amount;
 		Location l = new Location(location.getWorld(),location.getBlockX(),location.getBlockY()+2,location.getBlockZ());
 		l = l.add( 0.5, 0.0, 0.5);
 		this.hologram = HologramsAPI.createHologram(Main.get(), l);
@@ -29,7 +31,14 @@ public class StackedBlock extends Block{
 		}
 	}
 	
+	public int getAmount() {
+		return this.amount;
+	}
 
+	public void setAmount(int i) {
+		this.amount = i;
+	}
+	
 	public Hologram getHologram() {
 		return this.hologram;
 	}

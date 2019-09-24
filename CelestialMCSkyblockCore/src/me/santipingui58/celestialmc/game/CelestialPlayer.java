@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
+import me.santipingui58.celestialmc.game.spawner.CelestialSpawner;
 
 
 public class CelestialPlayer {
@@ -19,11 +20,34 @@ public class CelestialPlayer {
 	private UUID uuid;
 	private PlayerLocation location;
 	private Location prevLocation;
-	public CelestialPlayer(UUID uuid) {
+	private boolean fly;
+	private CelestialSpawner openspawnergui;
+	public CelestialPlayer(UUID uuid, boolean fly) {
 		this.uuid = uuid;		
+		this.fly = fly;
 		this.location = PlayerLocation.SPAWN;
 	}
 	
+	public CelestialSpawner getOpenSpawnerGUI() {
+		return this.openspawnergui;
+	}
+	
+	public void setOpenSpawnerGUI(CelestialSpawner spawner) {
+		this.openspawnergui = spawner;
+	}
+	public boolean isFlying() {
+		return this.fly;
+	}
+	
+	public void fly() {
+		this.fly = true;
+		this.getPlayer().setAllowFlight(true);
+	}
+	
+	public void stopFly() {
+		this.fly = false;
+		this.getPlayer().setAllowFlight(false);
+	}
 	public double getMoney() {
 	return	Main.econ.getBalance(Bukkit.getOfflinePlayer(uuid));
 	}
@@ -143,4 +167,19 @@ public class CelestialPlayer {
 		return list;
 	}
 	
+	
+	// !$ &b
+	// !% &e
+	
+	public void sendMessage(String msg, Result result) {
+		if (isOnline()) {
+			msg = msg.replace("!$", "§b");
+			msg = msg.replace("!%", "§e");
+			if (result.equals(Result.ALLOW)) {			
+				this.getPlayer().sendMessage(Main.skyblock_prefix + " §a" +msg);
+			} else {
+				this.getPlayer().sendMessage(Main.skyblock_prefix + " §c" +msg);
+			}
+		}
+	}
 }

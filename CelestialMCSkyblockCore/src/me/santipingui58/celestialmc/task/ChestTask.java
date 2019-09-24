@@ -2,20 +2,23 @@ package me.santipingui58.celestialmc.task;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
 
 import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.chest.AutoBlockChest;
 import me.santipingui58.celestialmc.game.chest.AutoBlockMaterial;
+import me.santipingui58.celestialmc.game.chest.AutoSellChest;
 import me.santipingui58.celestialmc.game.chest.ChestManager;
+import me.santipingui58.celestialmc.game.chest.MaterialSellValue;
 
 
 
-public class AutoBlockTask {
+public class ChestTask {
 
 	
 
-	public AutoBlockTask() {
+	public ChestTask() {
 		task();
 
 	}
@@ -51,6 +54,31 @@ public class AutoBlockTask {
             					 }
             			 }
             		  }
+            		  }
+            	  }
+            	  
+            	  
+            	  for (AutoSellChest aschest : ChestManager.getManager().getAutoSellChests()) {
+            		  if (aschest.isPlaced()) {
+            			  if (aschest.getInventory().getContents().length>0) {
+            				  for (ItemStack i : aschest.getInventory().getContents()) {
+     					  
+            					  if (i!=null) {
+            						  if (!i.getType().equals(Material.AIR)) {
+            							  
+            						  int v = MaterialSellValue.getValue(i.getType());
+            						  int money = aschest.getMoney();
+            						  aschest.setMoney(money+v);
+            						  i.setAmount(i.getAmount()-1);
+            						  aschest.setTimesUsed(aschest.getTimesUsed()+1);
+            					  }
+            				  }
+            				  }
+            				  
+            				  Chest chestState = (Chest) aschest.getInventory().getLocation().getBlock().getState();
+            				  chestState.setCustomName("§a§lAutoSell Chest - §6§l$"+aschest.getMoney());
+            				  chestState.update();
+		 }
             		  }
             	  }
             	   

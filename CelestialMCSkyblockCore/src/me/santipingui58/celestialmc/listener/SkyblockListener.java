@@ -43,6 +43,10 @@ public class SkyblockListener implements Listener{
 			 }
 				
 		 }
+		 } else {
+			 if (!e.getPlayer().hasPermission("celestialmc.admin")) {
+				 e.setCancelled(true);
+			 }
 		 }
 	 }
 	 
@@ -68,6 +72,10 @@ public class SkyblockListener implements Listener{
 						} 
 				 }
 			 }
+			 } else {
+				 if (!e.getPlayer().hasPermission("celestialmc.admin")) {
+					 e.setCancelled(true);
+				 }
 			 }
 	 }
 	 
@@ -92,9 +100,14 @@ public class SkyblockListener implements Listener{
 						} 
 				 }
 			 }
+			 } else {
+				 if (!e.getPlayer().hasPermission("celestialmc.admin")) {
+					 e.setCancelled(true);
+				 }
 			 }
 	 }
 	 }
+	 
 	 
 	 @EventHandler
 	 public void onGenerator(BlockFormEvent e) {

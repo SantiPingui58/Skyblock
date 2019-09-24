@@ -43,8 +43,10 @@ public class PlayerChatEvent implements Listener {
 		if (p.hasPermission("celestialmc.staff")) {
 			 msg = ChatColor.translateAlternateColorCodes('&', msg);
 			e.setFormat(prefix +p.getName() +"§8: §b"+msg );
-		} else if (p.hasPermission("celestialmc.donatorchat")) {
+		} else if (p.hasPermission("celestialmc.donator")) {
+			if (p.hasPermission("celestialmc.chatcolor")) {
 			 msg = ChatColor.translateAlternateColorCodes('&', msg);
+			}
 			e.setFormat(prefix +p.getName() +"§8: §f"+msg);
 		} else {
 			e.setFormat(prefix +" "+p.getName() +"§8: §7"+ msg );

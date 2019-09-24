@@ -17,21 +17,21 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
 import me.santipingui58.celestialmc.commands.AdminCommand;
-import me.santipingui58.celestialmc.commands.BlockChestCommand;
+import me.santipingui58.celestialmc.commands.ChestCommand;
 import me.santipingui58.celestialmc.commands.IslandCommand;
 import me.santipingui58.celestialmc.commands.SpawnCommand;
 import me.santipingui58.celestialmc.commands.SpawnerCommand;
 import me.santipingui58.celestialmc.game.CelestialPlayer;
 import me.santipingui58.celestialmc.game.DataManager;
 import me.santipingui58.celestialmc.game.chest.ChestManager;
+import me.santipingui58.celestialmc.game.spawner.SpawnerManager;
 import me.santipingui58.celestialmc.game.stacking.StackeableManager;
 import me.santipingui58.celestialmc.listener.PlayerChatEvent;
 import me.santipingui58.celestialmc.listener.PlayerConnectEvent;
 import me.santipingui58.celestialmc.listener.PlayerListener;
 import me.santipingui58.celestialmc.listener.SkyblockListener;
 import me.santipingui58.celestialmc.scoreboard.PinguiScoreboard;
-import me.santipingui58.celestialmc.spawner.SpawnerManager;
-import me.santipingui58.celestialmc.task.AutoBlockTask;
+import me.santipingui58.celestialmc.task.ChestTask;
 import me.santipingui58.celestialmc.task.MinuteTask;
 import me.santipingui58.celestialmc.task.PlayerMoveTask;
 import me.santipingui58.celestialmc.task.StackedBlockHologramsTask;
@@ -52,8 +52,17 @@ public class Main extends JavaPlugin {
 	public static Configuration config,islands,data;
 	private static Scoreboard scoreboard;
 	 public static Economy econ = null;
+	 
 	public static Team dev;
 	public static Team owner;
+	public static Team disciple;
+	public static Team master;
+	public static Team grandmaster;
+	public static Team emperor;
+	public static Team ancestor;
+	public static Team venerate;
+	public static Team saint;
+	public static Team celestial;
 	public static Team def;
 	public static Plugin get() {
 	    return pl;
@@ -80,21 +89,7 @@ public class Main extends JavaPlugin {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				ScoreboardManager manager = Bukkit.getScoreboardManager();
-				scoreboard = manager.getNewScoreboard();
-				
-				 dev = scoreboard.registerNewTeam("dev");
-				 dev.setPrefix("§5§l[DEV]§f ");
-				dev.setNameTagVisibility(NameTagVisibility.ALWAYS);
-				 owner = scoreboard.registerNewTeam("owner");
-				 owner.setPrefix("§4§l[OWNER]§f ");
-				 owner.setNameTagVisibility(NameTagVisibility.ALWAYS);
-				 def = scoreboard.registerNewTeam("def");
-				 def.setDisplayName("§7");
-				 def.setNameTagVisibility(NameTagVisibility.ALWAYS);
-				 
-		skyblock_prefix = "§c[Skyblock]";
-		prefix = "§b[CelestialMC]";
+				scoreboardsAndPrefixes();
 		File schematicsFolder =  new File( getDataFolder(),"schematics");
 		if( !schematicsFolder.exists()) schematicsFolder.mkdir();
 	
@@ -133,7 +128,7 @@ public class Main extends JavaPlugin {
 	private void registerCommands() {
 		 getCommand("island").setExecutor(new IslandCommand());
 		 getCommand("spawn").setExecutor(new SpawnCommand());
-		 getCommand("blockchest").setExecutor(new BlockChestCommand());
+		 getCommand("chest").setExecutor(new ChestCommand());
 		 getCommand("spawner").setExecutor(new SpawnerCommand());
 		 getCommand("admin").setExecutor(new AdminCommand());
 	}
@@ -142,7 +137,7 @@ public class Main extends JavaPlugin {
 	private void registerTasks() {
 		new PlayerMoveTask();
 		new TabTask();
-		new AutoBlockTask();
+		new ChestTask();
 		new StackedBlockHologramsTask();
 		new MinuteTask();
 	}
@@ -171,7 +166,60 @@ public class Main extends JavaPlugin {
 		}.runTaskLater(Main.get(), 1L);	
 	}
 
-	  
+	private void scoreboardsAndPrefixes() {
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		scoreboard = manager.getNewScoreboard();		
+		
+		
+		 dev = scoreboard.registerNewTeam("dev");
+		 dev.setPrefix("§5§l[DEV]§f ");
+		dev.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		
+		 owner = scoreboard.registerNewTeam("owner");
+		 owner.setPrefix("§4§l[OWNER]§f ");
+		 owner.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 def = scoreboard.registerNewTeam("def");
+		 def.setDisplayName("§7");
+		 def.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 disciple = scoreboard.registerNewTeam("disciple");
+		 disciple.setPrefix("§a[Disciple]§f ");
+		 disciple.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 master = scoreboard.registerNewTeam("master");
+		 master.setPrefix("§e[Master]§fe ");
+		 master.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 grandmaster = scoreboard.registerNewTeam("grandmaster");
+		 grandmaster.setPrefix("§6[GrandMaster]§f ");
+		 grandmaster.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 emperor = scoreboard.registerNewTeam("emperor");
+		 emperor.setPrefix("§c[Emperor]§f ");
+		 emperor.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 ancestor = scoreboard.registerNewTeam("ancestor");
+		 ancestor.setPrefix("§f[Ancestor]§f ");
+		 ancestor.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 venerate = scoreboard.registerNewTeam("venerate");
+		 venerate.setPrefix("§d§l[Venerate]§f ");
+		 venerate.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 saint = scoreboard.registerNewTeam("saint");
+		 saint.setPrefix("§c§l[Saint]§f ");
+		 saint.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 celestial = scoreboard.registerNewTeam("celestial");
+		 celestial.setPrefix("§b§l[Celestial]§f ");
+		 celestial.setNameTagVisibility(NameTagVisibility.ALWAYS);
+		 
+		 
+		 skyblock_prefix = "§c[Skyblock]";
+		 prefix = "§b[CelestialMC]";
+	}  
+	
 	public static Scoreboard getScoreboard() {
 		return scoreboard;
 	}

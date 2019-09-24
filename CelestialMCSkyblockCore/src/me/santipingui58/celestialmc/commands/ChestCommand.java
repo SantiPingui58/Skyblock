@@ -16,7 +16,7 @@ import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
 
 
 
-public class BlockChestCommand implements CommandExecutor {
+public class ChestCommand implements CommandExecutor {
 
 	
 	
@@ -29,13 +29,20 @@ public class BlockChestCommand implements CommandExecutor {
 			
 		} else {
 	
-		if(cmd.getName().equalsIgnoreCase("blockchest")){
+		if(cmd.getName().equalsIgnoreCase("chest")){
+			if (args.length==1) {
 			 Player p = (Player) sender;
+			 
 			 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(p);
+			 if (args[0].equalsIgnoreCase("autoblock")) {
 			ChestManager.getManager().createAutoBlockChest(cplayer);
 			p.sendMessage("Gave you an auto block chest");
-			
+			 } else if (args[0].equalsIgnoreCase("autosell")) {
+				 ChestManager.getManager().createAutosSellChest(cplayer);;
+					p.sendMessage("Gave you an auto sell chest");
+			 }
 			}
+		}
 			
 
 }

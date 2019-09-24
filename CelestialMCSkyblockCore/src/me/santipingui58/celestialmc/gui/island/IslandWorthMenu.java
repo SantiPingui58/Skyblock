@@ -31,6 +31,8 @@ public class IslandWorthMenu extends MenuBuilder {
 	s(44, new ItemBuilder(Material.ARROW).setTitle("§cGo back").build());
 	
 	int slot = 9;
+	
+	if (WorthManager.getManager().getTotalWorth(island)>0) {
 	for (StackeableBlockType types : StackeableBlockType.values()) {	
 		if (WorthManager.getManager().getBlocksAmount(island, types)>0) { 
 			int amount = 1;
@@ -47,7 +49,9 @@ public class IslandWorthMenu extends MenuBuilder {
 		slot++;
 		}		
 	}
-	
+	} else {
+		s(13,new ItemBuilder(Material.BARRIER).setTitle("§cIsland does not have any worth.").build());
+	}
 	}
 	
 

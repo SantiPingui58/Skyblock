@@ -44,7 +44,7 @@ public class SpawnCommand implements CommandExecutor {
 			 }
 			
 			 if (Main.config.getConfig().contains("spawn")) {
-				 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true);
+				 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,true);
 				 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(p);
 				 cplayer.setLocation(PlayerLocation.SPAWN);
 				 p.teleport(spawn);

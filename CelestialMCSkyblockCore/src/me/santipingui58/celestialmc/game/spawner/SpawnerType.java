@@ -1,4 +1,4 @@
-package me.santipingui58.celestialmc.spawner;
+package me.santipingui58.celestialmc.game.spawner;
 
 import org.bukkit.entity.EntityType;
 

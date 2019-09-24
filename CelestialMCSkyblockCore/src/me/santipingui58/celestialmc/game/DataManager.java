@@ -14,10 +14,13 @@ import org.bukkit.Location;
 
 import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.chest.AutoBlockChest;
+import me.santipingui58.celestialmc.game.chest.AutoSellChest;
 import me.santipingui58.celestialmc.game.chest.ChestManager;
 import me.santipingui58.celestialmc.game.skyblock.PlayerPermissions;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
+import me.santipingui58.celestialmc.game.stacking.SimpleBlock;
+import me.santipingui58.celestialmc.game.stacking.StackeableBlockType;
 import me.santipingui58.celestialmc.game.stacking.StackeableManager;
 import me.santipingui58.celestialmc.game.stacking.StackedBlock;
 import me.santipingui58.celestialmc.utils.Utils;
@@ -55,6 +58,7 @@ public class DataManager {
 	 public void savePlayerData() {
 		 for (CelestialPlayer cplayer : this.players) {
 			 Main.data.getConfig().set("players."+cplayer.getUUID().toString()+".loc", cplayer.getLocation().toString());
+			 Main.data.getConfig().set("players."+cplayer.getUUID().toString()+".fly", cplayer.isFlying());
 		 }
 		 Main.data.saveConfig();
 	 }
@@ -70,7 +74,12 @@ public class DataManager {
 		 loadIslands();
 	 }
 	 
-	 public void saveBlocks() {
+	 public void saveBlocks() {		 
+		 Main.data.getConfig().set("autoblockchests", null);
+		 Main.data.getConfig().set("autosellchests", null);
+		 Main.data.getConfig().set("stackedblocks", null);
+		 Main.data.getConfig().set("simpleblocks", null);
+		 
 		for (AutoBlockChest chests : ChestManager.getManager().getAutoBlockChests()) {
 			UUID uuid = chests.getUUID();
 			Location location = chests.getLocation();
@@ -85,6 +94,44 @@ public class DataManager {
 			Main.data.getConfig().set("autoblockchests."+uuid+".times", times);
 			
 		} 
+		for (AutoSellChest chests : ChestManager.getManager().getAutoSellChests()) {
+			UUID uuid = chests.getUUID();
+			Location location = chests.getLocation();
+			CelestialPlayer owner = chests.getOwner();
+			int times = chests.getTimesUsed();
+			int money = chests.getMoney();
+			boolean isplaced =chests.isPlaced();
+			Main.data.getConfig().set("autosellchests."+uuid+".isplaced", isplaced);
+			if(isplaced) {
+				Main.data.getConfig().set("autosellchests."+uuid+".location", Utils.setLoc(location, false));
+			}
+			Main.data.getConfig().set("autosellchests."+uuid+".owner", owner.getUUID().toString());
+			Main.data.getConfig().set("autosellchests."+uuid+".times", times);
+			Main.data.getConfig().set("autosellchests."+uuid+".money", money);
+			
+		} 
+		
+		for (StackedBlock sblock : StackeableManager.getManager().getStackedBlocks()) {
+			String uuid = sblock.getUUID().toString();
+			Location location  = sblock.getLocation();
+			int amount = sblock.getAmount();
+			StackeableBlockType type = sblock.getType();
+			Main.data.getConfig().set("stackedblocks."+uuid+".location", Utils.setLoc(location, true));
+			Main.data.getConfig().set("stackedblocks."+uuid+".amount", amount);
+			Main.data.getConfig().set("stackedblocks."+uuid+".type", type.toString());
+		}
+		
+		for (SimpleBlock sblock : StackeableManager.getManager().getSimpleBlocks()) {
+			String uuid = sblock.getUUID().toString();
+			Location location  = sblock.getLocation();
+			StackeableBlockType type = sblock.getType();
+			Main.data.getConfig().set("simpleblocks."+uuid+".location", Utils.setLoc(location, true));
+			Main.data.getConfig().set("simpleblocks."+uuid+".type", type.toString());
+		}
+		
+		
+		
+		
 		Main.data.saveConfig();
 	 }
 	 
@@ -97,20 +144,69 @@ public class DataManager {
 			 int times = Main.data.getConfig().getInt("autoblockchests."+s+".times");
 			 Location location = null;
 			 if (Main.data.getConfig().contains("autoblockchests."+s+".location")) {
-				 location = Utils.getLoc(Main.data.getConfig().getString("autoblockchests."+s+".location"));
+				 location = Utils.getLoc(Main.data.getConfig().getString("autoblockchests."+s+".location"),false,false);
 			 }
 			 
 			 AutoBlockChest abchest = new AutoBlockChest(uuid,owner,location,times);
+			 if (location!=null) {
+				 abchest.place(location);
+			 }
 			 ChestManager.getManager().getAutoBlockChests().add(abchest);			 
 		 }
 	 }
+		 
+		 if (Main.data.getConfig().contains("autosellchests")) {
+			 Set<String> abchests = Main.data.getConfig().getConfigurationSection("autosellchests").getKeys(false);
+			 for (String s : abchests) {
+				 UUID uuid = UUID.fromString(s);
+				 CelestialPlayer owner = SkyblockManager.getManager().getCelestialPlayer(UUID.fromString(Main.data.getConfig().getString("autosellchests."+s+".owner")));
+				 int times = Main.data.getConfig().getInt("autosellchests."+s+".times");
+				 int money = Main.data.getConfig().getInt("autosellchests."+s+".money");
+				 Location location = null;
+				 if (Main.data.getConfig().contains("autosellchests."+s+".location")) {
+					 location = Utils.getLoc(Main.data.getConfig().getString("autosellchests."+s+".location"),false,false);
+				 }
+				 
+				 AutoSellChest abchest = new AutoSellChest(uuid,owner,location,times,money);
+				 if (location!=null) {
+					 abchest.place(location);
+				 }
+				 ChestManager.getManager().getAutoSellChests().add(abchest);			 
+			 }
+		 }
+		 
+	   if (Main.data.getConfig().contains("stackedblocks")) {
+		   Set<String> stackedblocks = Main.data.getConfig().getConfigurationSection("stackedblocks").getKeys(false);
+		   for (String s : stackedblocks) {
+			   UUID uuid = UUID.fromString(s);
+			   Location location = Utils.getLoc(Main.data.getConfig().getString("stackedblocks."+s+".location"), false, false);
+			   StackeableBlockType type = StackeableBlockType.valueOf(Main.data.getConfig().getString("stackedblocks."+s+".type"));
+			   int amount = Main.data.getConfig().getInt("stackedblocks."+s+".amount");
+			   StackedBlock sblock = new StackedBlock(uuid, type, location, amount);
+			   StackeableManager.getManager().getStackedBlocks().add(sblock);
+			   
+		   }
+	   }
+	   
+	   if (Main.data.getConfig().contains("simpleblocks")) {
+		   Set<String> stackedblocks = Main.data.getConfig().getConfigurationSection("simpleblocks").getKeys(false);
+		   for (String s : stackedblocks) {
+			   UUID uuid = UUID.fromString(s);
+			   Location location = Utils.getLoc(Main.data.getConfig().getString("simpleblocks."+s+".location"), false, false);
+			   StackeableBlockType type = StackeableBlockType.valueOf(Main.data.getConfig().getString("simpleblocks."+s+".type"));
+			   SimpleBlock sblock = new SimpleBlock(uuid, type, location);
+			   StackeableManager.getManager().getSimpleBlocks().add(sblock);
+			   
+		   }
+	   }
 	 }
 	 public void loadPlayers() {
 
 		 if (Main.data.getConfig().contains("players")) {
 			 Set<String> players = Main.data.getConfig().getConfigurationSection("players").getKeys(false);
 			 for (String p : players) {
-			 CelestialPlayer cplayer = new CelestialPlayer(UUID.fromString(p));
+				boolean fly = Main.data.getConfig().getBoolean("players."+p+".fly");
+			 CelestialPlayer cplayer = new CelestialPlayer(UUID.fromString(p),fly);
 			PlayerLocation plocation = PlayerLocation.valueOf(Main.data.getConfig().getString("players."+p.toString()+".loc"));
 			cplayer.setLocation(plocation);
 			
@@ -122,7 +218,7 @@ public class DataManager {
 	 }
 	 
 	 public CelestialPlayer createPlayerData(UUID uuid) {
-		 CelestialPlayer cplayer = new CelestialPlayer(uuid);
+		 CelestialPlayer cplayer = new CelestialPlayer(uuid,false);
 		 cplayer.setLocation(PlayerLocation.SPAWN);
 		 this.players.add(cplayer);
 		 return cplayer;
@@ -141,9 +237,9 @@ public class DataManager {
 			 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(uuid);	
 			 int money = Main.islands.getConfig().getInt("islands."+s+".money");
 			 List<String> transactions = Main.islands.getConfig().getStringList("islands."+s+".transactions");
-			 Location spawn = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".spawn"), true);
-			 Location home = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".home"), true);
-			 Location warp = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".warp"), true);
+			 Location spawn = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".spawn"), true,false);
+			 Location home = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".home"), true,false);
+			 Location warp = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".warp"), true,false);
 			 boolean warpenabled =	Main.islands.getConfig().getBoolean("islands."+s+".warpenabled");
 			 
 			 int space = Main.islands.getConfig().getInt("islands."+s+".space");

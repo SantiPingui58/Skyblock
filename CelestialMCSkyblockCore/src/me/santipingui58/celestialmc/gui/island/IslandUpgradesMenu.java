@@ -284,48 +284,48 @@ public class IslandUpgradesMenu extends MenuBuilder {
 	
 	private int getMaxSpacePrice(int level) {
 		if (level==1) {
-			return 1000;
+			return 10000;
 		} else if (level==2) {
-			return 2000;
+			return 20000;
 		} else if (level==3) {
-			return 5000;
+			return 50000;
 		} else if (level==4) {
-			return 15000;
+			return 150000;
 		} else if (level==5) {
-			return 25000;
+			return 250000;
 		} else if (level==6) {
-			return 45000;
+			return 450000;
 		} else if (level==7) {
-			return 100000;
-		} else if (level==8) {
-			return 200000;
-		} else if (level==9) {
-			return 400000;
-		} else if (level==10) {
 			return 1000000;
+		} else if (level==8) {
+			return 2000000;
+		} else if (level==9) {
+			return 4000000;
+		} else if (level==10) {
+			return 10000000;
 		}
 		return 0;
 	}
 	
 	private int getMaxPlayersPrice(int level) {
 		if (level==1) {
-			return 100;
-		} else if (level==2) {
-			return 500;
-		} else if (level==3) {
 			return 1000;
+		} else if (level==2) {
+			return 5000;
+		} else if (level==3) {
+			return 10000;
 		} else if (level==4) {
-			return 3000;
-		} else if (level==5) {
-			return 7500;
-		} else if (level==6) {
-			return 15000;
-		} else if (level==7) {
 			return 30000;
+		} else if (level==5) {
+			return 75000;
+		} else if (level==6) {
+			return 150000;
+		} else if (level==7) {
+			return 300000;
 		} else if (level==8) {
-			return 50000;
+			return 500000;
 		} else if (level==9) {
-			return 100000;
+			return 1000000;
 		} 
 		return 0;
 	}
@@ -333,46 +333,46 @@ public class IslandUpgradesMenu extends MenuBuilder {
 	
 	private int getMaxSpawnersPrice(int level) {
 		if (level==1) {
-			return 500;
+			return 5000;
 		} else if (level==2) {
-			return 2500;
+			return 25000;
 		} else if (level==3) {
-			return 7500;
+			return 75000;
 		} else if (level==4) {
-			return 15000;
-		} else if (level==5) {
-			return 30000;
-		} else if (level==6) {
-			return 50000;
-		} else if (level==7) {
 			return 150000;
-		} else if (level==8) {
+		} else if (level==5) {
 			return 300000;
-		} else if (level==9) {
+		} else if (level==6) {
 			return 500000;
+		} else if (level==7) {
+			return 1500000;
+		} else if (level==8) {
+			return 3000000;
+		} else if (level==9) {
+			return 5000000;
 		}
 		return 0;
 	}
 	
 	private int getMaxHoppersPrice(int level) {
 		if (level==1) {
-			return 500;
+			return 5000;
 		} else if (level==2) {
-			return 2500;
+			return 25000;
 		} else if (level==3) {
-			return 7500;
+			return 75000;
 		} else if (level==4) {
-			return 15000;
-		} else if (level==5) {
-			return 30000;
-		} else if (level==6) {
-			return 50000;
-		} else if (level==7) {
 			return 150000;
-		} else if (level==8) {
+		} else if (level==5) {
 			return 300000;
-		} else if (level==9) {
+		} else if (level==6) {
 			return 500000;
+		} else if (level==7) {
+			return 1500000;
+		} else if (level==8) {
+			return 3000000;
+		} else if (level==9) {
+			return 5000000;
 		}
 		return 0;
 	}
@@ -380,46 +380,46 @@ public class IslandUpgradesMenu extends MenuBuilder {
 	
 	private int getMaxMinionsPrice(int level) {
 		if (level==1) {
-			return 500;
+			return 5000;
 		} else if (level==2) {
-			return 2500;
+			return 25000;
 		} else if (level==3) {
-			return 7500;
+			return 75000;
 		} else if (level==4) {
-			return 15000;
-		} else if (level==5) {
-			return 30000;
-		} else if (level==6) {
-			return 50000;
-		} else if (level==7) {
 			return 150000;
-		} else if (level==8) {
+		} else if (level==5) {
 			return 300000;
-		} else if (level==9) {
+		} else if (level==6) {
 			return 500000;
+		} else if (level==7) {
+			return 1500000;
+		} else if (level==8) {
+			return 3000000;
+		} else if (level==9) {
+			return 5000000;
 		} 
 		return 0;
 	}
 	
 	private int getGenerationPrice(int level) {
 		if (level==1) {
-			return 1000;
-		} else if (level==2) {
-			return 3000;
-		} else if (level==3) {
 			return 10000;
+		} else if (level==2) {
+			return 30000;
+		} else if (level==3) {
+			return 100000;
 		} else if (level==4) {
-			return 25000;
+			return 250000;
 		} else if (level==5) {
-			return 50000;
-		} else if (level==6) {
-			return 150000;
-		} else if (level==7) {
 			return 500000;
-		} else if (level==8) {
-			return 1000000;
-		} else if (level==9) {
+		} else if (level==6) {
+			return 1500000;
+		} else if (level==7) {
 			return 5000000;
+		} else if (level==8) {
+			return 10000000;
+		} else if (level==9) {
+			return 50000000;
 		}
 		return 0;
 	}
