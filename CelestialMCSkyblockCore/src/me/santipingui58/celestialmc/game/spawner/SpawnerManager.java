@@ -37,10 +37,20 @@ public class SpawnerManager implements Listener {
 	}
 	
 	 public void createSpawner(CelestialPlayer owner,SpawnerType type) {
-		 CelestialSpawner spawner = new CelestialSpawner(UUID.randomUUID(), owner, null, type);
+		 CelestialSpawner spawner = new CelestialSpawner(UUID.randomUUID(), owner, null, type,1);
 		 spawners.add(spawner);	
 		 owner.getPlayer().getInventory().addItem(spawner.getItem());
 		 		 
+	 }
+	 
+	 
+	 public CelestialSpawner getSpawner(UUID uuid) {
+		 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {			
+			 if (spawner.getUUID().toString().equalsIgnoreCase(uuid.toString())) {
+				 return spawner;
+			 }
+		 }
+		 return null;
 	 }
 	 
 	 public CelestialSpawner getSpawnerByItem(ItemStack item) {
@@ -54,8 +64,10 @@ public class SpawnerManager implements Listener {
 	 
 	 public CelestialSpawner getSpawnerAt(Location l) {
 		 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
+			 if (spawner.isPlaced()) {
 			 if (spawner.getLocation().equals(l)) {
 				 return spawner;
+			 }
 			 }
 		 }
 		 return null;
@@ -69,10 +81,14 @@ public class SpawnerManager implements Listener {
 			 if (e.getItem()!=null) {
 			 if (e.getItem().getType().equals(Material.SPAWNER)) {
 				 ItemStack item = e.getItem();
-				 if (item.getItemMeta().hasLore() && item.getItemMeta().getLore().size()>0) {
+				 if (item.getItemMeta().hasLore() && item.getItemMeta().getLore().size()>=9) {
 					 String string = ChatColor.stripColor(item.getItemMeta().getLore().get(8));
+					 UUID uuid = null;
 					 try {
-						 UUID uuid = UUID.fromString(string);
+						  uuid = UUID.fromString(string);
+					 } catch(Exception ex) {
+						 return;
+					 }
 						 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
 							 if (spawner.getUUID().toString().equalsIgnoreCase(uuid.toString())) {
 								 CelestialSpawner clickedspawner = SpawnerManager.getManager().getSpawnerAt(e.getClickedBlock().getLocation());
@@ -90,9 +106,6 @@ public class SpawnerManager implements Listener {
 								 
 							 }
 						 }
-						 
-					 } catch (Exception ex) {
-					 }
 				 } 
 			 } 
 			 }
@@ -112,34 +125,42 @@ public class SpawnerManager implements Listener {
 	 @EventHandler
 	 public void onPlace(BlockPlaceEvent e) {
 		 if (e.getItemInHand().getType().equals(Material.SPAWNER)) {
+			 if (!e.getBlockAgainst().getType().equals(Material.SPAWNER)) {
 			 ItemStack item = e.getItemInHand();
-			 if (item.getItemMeta().getLore().size()>0) {
+			 if (item.hasItemMeta()) {
+				 if (item.getItemMeta().hasLore()) {
+			 if (item.getItemMeta().getLore().size()>=9) {
 				 String string = ChatColor.stripColor(item.getItemMeta().getLore().get(8));			
+				 UUID uuid = null;
 				 try {
-				 UUID uuid = UUID.fromString(string);
+				  uuid = UUID.fromString(string);
+				 } catch (Exception ex) {}
+				 
 		 for (CelestialSpawner spawner: SpawnerManager.getManager().getSpawners()) {
 			 if (spawner.getUUID().toString().equalsIgnoreCase(uuid.toString())) {
-				 spawner.place(e.getBlock().getLocation());
-				spawner.updateSpawnerData();			 
+				 spawner.place(e.getBlock().getLocation());					 
+				 spawner.updateSpawnerData();	
 				 e.getPlayer().sendMessage(Main.skyblock_prefix+ " §aYou have placed an Spawner!");
 				 if (e.getPlayer().getInventory().contains(spawner.getItem())) {
 					 e.getPlayer().getInventory().remove(spawner.getItem());
-				 }
+				 }			
 				 return;
 			 } 
 		 }
-		 } catch (Exception ex) {}
+		
 			 } 
 	 }
+			 }
 	 }
-	 
+	 }
+	 }
 	 @EventHandler
 	 public void onBreak(BlockBreakEvent e) {
 		 if (e.getBlock().getType().equals(Material.SPAWNER)) {
 			 for (CelestialSpawner spawner: SpawnerManager.getManager().getSpawners()) {
 				 if (spawner.isPlaced()) {
 				 if (spawner.getLocation().equals(e.getBlock().getLocation())) {
-					 e.getPlayer().sendMessage("Pick Up");
+					 e.getPlayer().sendMessage(Main.skyblock_prefix+ " §aYou have picked up an Spawner!");
 					 e.setCancelled(true);
 					 e.getBlock().setType(Material.AIR);
 					 e.getBlock().getWorld().dropItem(e.getBlock().getLocation(), spawner.getItem());

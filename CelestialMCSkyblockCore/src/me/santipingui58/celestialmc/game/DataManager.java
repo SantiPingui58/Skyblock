@@ -19,6 +19,9 @@ import me.santipingui58.celestialmc.game.chest.ChestManager;
 import me.santipingui58.celestialmc.game.skyblock.PlayerPermissions;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
+import me.santipingui58.celestialmc.game.spawner.CelestialSpawner;
+import me.santipingui58.celestialmc.game.spawner.SpawnerManager;
+import me.santipingui58.celestialmc.game.spawner.SpawnerType;
 import me.santipingui58.celestialmc.game.stacking.SimpleBlock;
 import me.santipingui58.celestialmc.game.stacking.StackeableBlockType;
 import me.santipingui58.celestialmc.game.stacking.StackeableManager;
@@ -67,12 +70,41 @@ public class DataManager {
 		 savePlayerData();
 		 saveIslands();		 
 		 saveBlocks();
+		 saveSpawners();
 	 }
 	 
 	 public void loadData() {
 		 loadPlayers();
 		 loadIslands();
 	 }
+	 
+	 public void saveSpawners() {
+		 Main.data.getConfig().set("spawners", null);
+		 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {
+			 String uuid = spawner.getUUID().toString();
+			 int level = spawner.getLevel();
+			 int count = spawner.getSpawnedMobs();
+			 SpawnerType type = spawner.getType();
+			 boolean activated = spawner.isActivated();
+			 CelestialPlayer owner = spawner.getOwner();
+			 List<String> stackedspawners = new ArrayList<String>();
+			 for (CelestialSpawner s : spawner.getStackedSpawners()) {
+				 stackedspawners.add(s.getUUID().toString());
+			 }
+			 if (spawner.getLocation()!=null) {
+				 Main.data.getConfig().set("spawners."+uuid+".location", Utils.setLoc(spawner.getLocation(), false));
+			 }
+			 
+			 Main.data.getConfig().set("spawners."+uuid+".owner", owner.getUUID().toString());
+			 Main.data.getConfig().set("spawners."+uuid+".level", level);
+			 Main.data.getConfig().set("spawners."+uuid+".count", count);
+			 Main.data.getConfig().set("spawners."+uuid+".type", type.toString());
+			 Main.data.getConfig().set("spawners."+uuid+".activated", activated);
+			 Main.data.getConfig().set("spawners."+uuid+".stackedspawners", stackedspawners);	 
+		 }
+		 Main.data.saveConfig();
+	 }
+	 
 	 
 	 public void saveBlocks() {		 
 		 Main.data.getConfig().set("autoblockchests", null);
@@ -133,6 +165,51 @@ public class DataManager {
 		
 		
 		Main.data.saveConfig();
+	 }
+	 
+	 
+	 public void loadSpawners() {
+		 if (Main.data.getConfig().contains("spawners")) {
+			 Set<String> spawners = Main.data.getConfig().getConfigurationSection("spawners").getKeys(false);
+			 for (String s : spawners) {
+				 UUID uuid = UUID.fromString(s);
+				 CelestialPlayer owner = SkyblockManager.getManager().getCelestialPlayer(UUID.fromString(Main.data.getConfig().getString("spawners."+s+".owner")));
+				 int amount = Main.data.getConfig().getInt("spawners."+s+".amount");
+				 int level = Main.data.getConfig().getInt("spawners."+s+".level");
+				 boolean activated = Main.data.getConfig().getBoolean("spawners."+s+".activated");
+				 Location location = null;
+				 if (Main.data.getConfig().contains("spawners."+s+".location")) {
+					 location = Utils.getLoc(Main.data.getConfig().getString("spawners."+s+".location"),false,false);
+				 }
+				 SpawnerType type = SpawnerType.valueOf(Main.data.getConfig().getString("spawners."+s+".type"));
+				 
+				CelestialSpawner spawner = new CelestialSpawner(uuid, owner, location, type,level);
+				spawner.setSpawnedMobs(amount);
+				if (activated) {
+					spawner.activate();
+				} else {
+					spawner.desactivate();
+				}
+				 SpawnerManager.getManager().getSpawners().add(spawner);
+			 }
+			 
+			 loadStackedSpawners();
+		 }
+	 }
+	 
+	 private void loadStackedSpawners() {
+		 Set<String> sp = Main.data.getConfig().getConfigurationSection("spawners").getKeys(false);
+		 for (String s : sp) {			 
+		 if (Main.data.getConfig().getStringList("spawners."+s+".stackedspawners").size()>0) {
+			 CelestialSpawner spawner = SpawnerManager.getManager().getSpawner(UUID.fromString(s));
+			 List<String>  list = Main.data.getConfig().getStringList("spawners."+s+".stackedspawners");	 
+		 for (String str : list) {
+			 UUID uuid = UUID.fromString(str);
+			 CelestialSpawner stacked = SpawnerManager.getManager().getSpawner(uuid);
+			 spawner.getStackedSpawners().add(stacked);
+		 }
+		 }
+		 }
 	 }
 	 
 	 public void loadBlocks() {

@@ -44,6 +44,7 @@ public class SpawnerMenu extends MenuBuilder {
 		s(4,new ItemBuilder(Material.SPAWNER).setTitle("§2§lSpawner info")
 				.addLore("§7Spawner Mob Type: §c§l" +spawner.getTitle())
 				.addLore("§7Spawned mobs: §b" + spawner.getSpawnedMobs())
+				.addLore("§3Stacked Spawners: §f" + spawner.getStackedSpawners().size())
 				.addLore("")
 				.addLore("§7Spawner Player Range: §e" + spawner.getRange())
 				.addLore("§7Spawner Spawn Amount: §e" + spawner.getSpawnCount())

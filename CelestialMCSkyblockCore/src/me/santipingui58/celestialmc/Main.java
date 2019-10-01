@@ -97,7 +97,7 @@ public class Main extends JavaPlugin {
 		registerEvents();
 		DataManager.getManager().loadIslands();
 		DataManager.getManager().loadBlocks();
-		
+		DataManager.getManager().loadSpawners();
 		for (CelestialPlayer cplayer : DataManager.getManager().getOnlinePlayers()) {
 			FastBoard board = new FastBoard(cplayer.getPlayer());
 			board.updateTitle("§a§lCelestialMC");		 

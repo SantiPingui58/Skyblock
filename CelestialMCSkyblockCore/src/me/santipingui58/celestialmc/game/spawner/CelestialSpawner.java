@@ -30,17 +30,17 @@ public class CelestialSpawner {
 	
 	private List<CelestialSpawner> stackedspawners = new ArrayList<CelestialSpawner>();
 	
-	public CelestialSpawner(UUID uuid, CelestialPlayer owner, Location location, SpawnerType type) {
+	public CelestialSpawner(UUID uuid, CelestialPlayer owner, Location location, SpawnerType type,int level) {
 		if (uuid==null) {
-		this.uuid = uuid;
-		} else {
 			this.uuid = UUID.randomUUID();
+		} else {
+			this.uuid = uuid;	
 		}
 		
 		this.owner = owner;
 		this.location = location;
 		this.type = type;
-		this.level = 1;
+		this.level = level;
 	}
 	
 	
@@ -60,6 +60,7 @@ public class CelestialSpawner {
 	}
 	
 	public void levelUp( ) {
+		updateSpawnerData();
 		if (this.level<4) {
 			this.level = this.level+1;
 		}
@@ -136,12 +137,19 @@ public class CelestialSpawner {
 	}
 	
 	public void updateSpawnerData() {
+		if (this.location!=null) {
 		 CreatureSpawner creaturespawner = (CreatureSpawner) this.location.getBlock().getState();			 
 		 creaturespawner.setSpawnedType(this.type.toEntityType());
-		 int ticks = (int) (getDelay()*20);
+		 int ticks = (int) (getDelay()*20); 
 		 if (ticks>0) {
-			 creaturespawner.setMaxSpawnDelay(ticks);
-			 creaturespawner.setMinSpawnDelay(ticks);
+			 if (creaturespawner.getMinSpawnDelay()<ticks) {
+				 creaturespawner.setMaxSpawnDelay(ticks);
+				 creaturespawner.setMinSpawnDelay(ticks);	
+			 } else {
+				 creaturespawner.setMinSpawnDelay(ticks);
+				 creaturespawner.setMaxSpawnDelay(ticks);
+			 }
+			 
 		 } else {
 			 creaturespawner.setMaxSpawnDelay(1);
 			 creaturespawner.setMinSpawnDelay(1);
@@ -150,17 +158,18 @@ public class CelestialSpawner {
 		 creaturespawner.setSpawnCount(getSpawnCount());
 		 creaturespawner.update();
 	}
+	}
 	
 	public double getDelay() {
 		 double s = this.getStackedSpawners().size()*0.25;
 		 int delay = 60;
 		 double t = delay-s;
 		 if (this.level==2) {
-			 t = t*0.1;
+			 t = t- t*0.1;
 		 } else if (this.level==3) {
-			 t=t*0.25;
+			 t=t - t*0.25;
 		 } else if (this.level==4) {
-			 t=t*0.5;
+			 t=t- t*0.5;
 		 }
 		 if (t<0) {
 			 t = 0.1;

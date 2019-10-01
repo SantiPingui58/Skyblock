@@ -46,7 +46,7 @@ public class SpawnerUpgradesMenu extends MenuBuilder {
 					.addLore("§7- Spawner Spawn Amount: §e3")
 					.addLore("§7- Spawner Player Range: §e15 blocks")
 					.addLore("")
-					.addLore("§aUpgrade price §7(x"+size+" Spawners)§a: §6§l$" + getPrice(spawner)).build());
+					.addLore("§aUpgrade price §7(x"+size+" Spawners)§a: §6§l$" + getPrice(spawner,1)).build());
 		}  
 		
 		if (spawner.getLevel()>=3) {
@@ -62,7 +62,7 @@ public class SpawnerUpgradesMenu extends MenuBuilder {
 					.addLore("§7- Spawner Spawn Amount: §e5")
 					.addLore("§7- Spawner Player Range: §e20 blocks")
 					.addLore("")
-					.addLore("§aUpgrade price §7(x"+size+" Spawners)§a: §6§l$" + getPrice(spawner)).build());
+					.addLore("§aUpgrade price §7(x"+size+" Spawners)§a: §6§l$" + getPrice(spawner,2)).build());
 		} 
 		
 		if (spawner.getLevel()>=4) {
@@ -78,17 +78,17 @@ public class SpawnerUpgradesMenu extends MenuBuilder {
 					.addLore("§7- Spawner Spawn Amount: §e10")
 					.addLore("§7- Spawner Player Range: §e30 blocks")
 					.addLore("")
-					.addLore("§aUpgrade price §7(x"+size+" Spawners)§a: §6§l$" + getPrice(spawner)).build());
+					.addLore("§aUpgrade price §7(x"+size+" Spawners)§a: §6§l$" + getPrice(spawner,3)).build());
 		} 
 	}
 	
-	private int getPrice(CelestialSpawner spawner) {
+	private int getPrice(CelestialSpawner spawner,int level) {
 		int size = spawner.getStackedSpawners().size()+1;
-		if (spawner.getLevel()==1) {
+		if (level==1) {
 			return 1000*size;
-		}  else if (spawner.getLevel()==2) {
+		}  else if (level==2) {
 			return 10000*size;
-		} else if (spawner.getLevel()==3) {
+		} else if (level==3) {
 			return 100000*size;
 		}
 		return 0;
@@ -103,14 +103,14 @@ public class SpawnerUpgradesMenu extends MenuBuilder {
 			new SpawnerMenu(p,spawner).o(p);
 		} else if (slot==12) {
 			if (spawner.getLevel()==1) {
-				if (cplayer.hasMoney(getPrice(spawner))) {
+				if (cplayer.hasMoney(getPrice(spawner,1))) {
 					spawner.levelUp();
 					for (CelestialSpawner s : spawner.getStackedSpawners()) {
 						s.levelUp();
 					}
-					cplayer.takeMoney(getPrice(spawner));
+					cplayer.takeMoney(getPrice(spawner,1));
 					cplayer.sendMessage("You have succesfully upgraded this Spawner to Level II!", Result.ALLOW);
-					new SpawnerUpgradesMenu(p,spawner);
+					new SpawnerUpgradesMenu(p,spawner).o(p);
 				} else {
 					cplayer.sendMessage("You do not have enough money to do this.", Result.DENY);
 				}
@@ -119,14 +119,15 @@ public class SpawnerUpgradesMenu extends MenuBuilder {
 			}
 		} else if (slot==14) {
 			if (spawner.getLevel()==2) {
-				if (cplayer.hasMoney(getPrice(spawner))) {
+				if (cplayer.hasMoney(getPrice(spawner,2))) {
 					spawner.levelUp();
 					for (CelestialSpawner s : spawner.getStackedSpawners()) {
 						s.levelUp();
 					}
-					cplayer.takeMoney(getPrice(spawner));
+					
+					cplayer.takeMoney(getPrice(spawner,2));
 					cplayer.sendMessage("You have succesfully upgraded this Spawner to Level III!", Result.ALLOW);
-					new SpawnerUpgradesMenu(p,spawner);
+					new SpawnerUpgradesMenu(p,spawner).o(p);
 				} else {
 					cplayer.sendMessage("You do not have enough money to do this.", Result.DENY);
 				}
@@ -137,14 +138,14 @@ public class SpawnerUpgradesMenu extends MenuBuilder {
 			}
 		}  else if (slot==16) {
 			if (spawner.getLevel()==3) {
-				if (cplayer.hasMoney(getPrice(spawner))) {
+				if (cplayer.hasMoney(getPrice(spawner,3))) {
 					spawner.levelUp();
 					for (CelestialSpawner s : spawner.getStackedSpawners()) {
 						s.levelUp();
 					}
-					cplayer.takeMoney(getPrice(spawner));
+					cplayer.takeMoney(getPrice(spawner,3));
 					cplayer.sendMessage("You have succesfully upgraded this Spawner to Level IV!", Result.ALLOW);
-					new SpawnerUpgradesMenu(p,spawner);
+					new SpawnerUpgradesMenu(p,spawner).o(p);
 				} else {
 					cplayer.sendMessage("You do not have enough money to do this.", Result.DENY);
 				}
