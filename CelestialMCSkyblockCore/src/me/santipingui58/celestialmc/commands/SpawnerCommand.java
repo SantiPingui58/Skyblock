@@ -6,14 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.santipingui58.celestialmc.game.CelestialPlayer;
+import me.santipingui58.celestialmc.game.hopper.HopperManager;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
 import me.santipingui58.celestialmc.game.spawner.SpawnerManager;
 import me.santipingui58.celestialmc.game.spawner.SpawnerType;
-
-
-
-
-
 
 
 public class SpawnerCommand implements CommandExecutor {
@@ -33,15 +29,12 @@ public class SpawnerCommand implements CommandExecutor {
 			 Player p = (Player) sender;
 			 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(p);
 			 if (args.length==0) {
-			SpawnerManager.getManager().createSpawner(cplayer,SpawnerType.COW);
-			 } else if (args.length==1) {
-				 SpawnerManager.getManager().createSpawner(cplayer,SpawnerType.PIG);
-			 } else if (args.length==2) {
-				 SpawnerManager.getManager().createSpawner(cplayer,SpawnerType.WITHER_SKELETON);
-			 } else if (args.length==3) {
-				 SpawnerManager.getManager().createSpawner(cplayer,SpawnerType.CREEPER);
+			SpawnerManager.getManager().createSpawner(cplayer, SpawnerType.COW);
+			 }  else if (args.length==1) {
+				 HopperManager.getManager().createHopper(cplayer);
 			 }
 			}
+		
 			
 
 }

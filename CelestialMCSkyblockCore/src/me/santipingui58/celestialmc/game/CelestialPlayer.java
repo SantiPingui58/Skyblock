@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import me.santipingui58.celestialmc.Main;
+import me.santipingui58.celestialmc.game.hopper.CelestialHopper;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 import me.santipingui58.celestialmc.game.spawner.CelestialSpawner;
 
@@ -22,6 +23,7 @@ public class CelestialPlayer {
 	private Location prevLocation;
 	private boolean fly;
 	private CelestialSpawner openspawnergui;
+	private CelestialHopper openhoppergui;
 	public CelestialPlayer(UUID uuid, boolean fly) {
 		this.uuid = uuid;		
 		this.fly = fly;
@@ -35,6 +37,15 @@ public class CelestialPlayer {
 	public void setOpenSpawnerGUI(CelestialSpawner spawner) {
 		this.openspawnergui = spawner;
 	}
+	
+	public CelestialHopper getOpenHopperGUI() {
+		return this.openhoppergui;
+	}
+	
+	public void setOpenHopperGUI(CelestialHopper hopper) {
+		this.openhoppergui = hopper;
+	}
+	
 	public boolean isFlying() {
 		return this.fly;
 	}

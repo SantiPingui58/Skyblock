@@ -92,7 +92,7 @@ public class DataManager {
 				 stackedspawners.add(s.getUUID().toString());
 			 }
 			 if (spawner.getLocation()!=null) {
-				 Main.data.getConfig().set("spawners."+uuid+".location", Utils.setLoc(spawner.getLocation(), false));
+				 Main.data.getConfig().set("spawners."+uuid+".location", Utils.getUtils().setLoc(spawner.getLocation(), false));
 			 }
 			 
 			 Main.data.getConfig().set("spawners."+uuid+".owner", owner.getUUID().toString());
@@ -120,7 +120,7 @@ public class DataManager {
 			boolean isplaced =chests.isPlaced();
 			Main.data.getConfig().set("autoblockchests."+uuid+".isplaced", isplaced);
 			if(isplaced) {
-				Main.data.getConfig().set("autoblockchests."+uuid+".location", Utils.setLoc(location, false));
+				Main.data.getConfig().set("autoblockchests."+uuid+".location", Utils.getUtils().setLoc(location, false));
 			}
 			Main.data.getConfig().set("autoblockchests."+uuid+".owner", owner.getUUID().toString());
 			Main.data.getConfig().set("autoblockchests."+uuid+".times", times);
@@ -135,7 +135,7 @@ public class DataManager {
 			boolean isplaced =chests.isPlaced();
 			Main.data.getConfig().set("autosellchests."+uuid+".isplaced", isplaced);
 			if(isplaced) {
-				Main.data.getConfig().set("autosellchests."+uuid+".location", Utils.setLoc(location, false));
+				Main.data.getConfig().set("autosellchests."+uuid+".location", Utils.getUtils().setLoc(location, false));
 			}
 			Main.data.getConfig().set("autosellchests."+uuid+".owner", owner.getUUID().toString());
 			Main.data.getConfig().set("autosellchests."+uuid+".times", times);
@@ -148,7 +148,7 @@ public class DataManager {
 			Location location  = sblock.getLocation();
 			int amount = sblock.getAmount();
 			StackeableBlockType type = sblock.getType();
-			Main.data.getConfig().set("stackedblocks."+uuid+".location", Utils.setLoc(location, true));
+			Main.data.getConfig().set("stackedblocks."+uuid+".location", Utils.getUtils().setLoc(location, true));
 			Main.data.getConfig().set("stackedblocks."+uuid+".amount", amount);
 			Main.data.getConfig().set("stackedblocks."+uuid+".type", type.toString());
 		}
@@ -157,7 +157,7 @@ public class DataManager {
 			String uuid = sblock.getUUID().toString();
 			Location location  = sblock.getLocation();
 			StackeableBlockType type = sblock.getType();
-			Main.data.getConfig().set("simpleblocks."+uuid+".location", Utils.setLoc(location, true));
+			Main.data.getConfig().set("simpleblocks."+uuid+".location", Utils.getUtils().setLoc(location, true));
 			Main.data.getConfig().set("simpleblocks."+uuid+".type", type.toString());
 		}
 		
@@ -179,7 +179,7 @@ public class DataManager {
 				 boolean activated = Main.data.getConfig().getBoolean("spawners."+s+".activated");
 				 Location location = null;
 				 if (Main.data.getConfig().contains("spawners."+s+".location")) {
-					 location = Utils.getLoc(Main.data.getConfig().getString("spawners."+s+".location"),false,false);
+					 location = Utils.getUtils().getLoc(Main.data.getConfig().getString("spawners."+s+".location"),false,false);
 				 }
 				 SpawnerType type = SpawnerType.valueOf(Main.data.getConfig().getString("spawners."+s+".type"));
 				 
@@ -221,7 +221,7 @@ public class DataManager {
 			 int times = Main.data.getConfig().getInt("autoblockchests."+s+".times");
 			 Location location = null;
 			 if (Main.data.getConfig().contains("autoblockchests."+s+".location")) {
-				 location = Utils.getLoc(Main.data.getConfig().getString("autoblockchests."+s+".location"),false,false);
+				 location = Utils.getUtils().getLoc(Main.data.getConfig().getString("autoblockchests."+s+".location"),false,false);
 			 }
 			 
 			 AutoBlockChest abchest = new AutoBlockChest(uuid,owner,location,times);
@@ -241,7 +241,7 @@ public class DataManager {
 				 int money = Main.data.getConfig().getInt("autosellchests."+s+".money");
 				 Location location = null;
 				 if (Main.data.getConfig().contains("autosellchests."+s+".location")) {
-					 location = Utils.getLoc(Main.data.getConfig().getString("autosellchests."+s+".location"),false,false);
+					 location = Utils.getUtils().getLoc(Main.data.getConfig().getString("autosellchests."+s+".location"),false,false);
 				 }
 				 
 				 AutoSellChest abchest = new AutoSellChest(uuid,owner,location,times,money);
@@ -256,7 +256,7 @@ public class DataManager {
 		   Set<String> stackedblocks = Main.data.getConfig().getConfigurationSection("stackedblocks").getKeys(false);
 		   for (String s : stackedblocks) {
 			   UUID uuid = UUID.fromString(s);
-			   Location location = Utils.getLoc(Main.data.getConfig().getString("stackedblocks."+s+".location"), false, false);
+			   Location location = Utils.getUtils().getLoc(Main.data.getConfig().getString("stackedblocks."+s+".location"), false, false);
 			   StackeableBlockType type = StackeableBlockType.valueOf(Main.data.getConfig().getString("stackedblocks."+s+".type"));
 			   int amount = Main.data.getConfig().getInt("stackedblocks."+s+".amount");
 			   StackedBlock sblock = new StackedBlock(uuid, type, location, amount);
@@ -269,7 +269,7 @@ public class DataManager {
 		   Set<String> stackedblocks = Main.data.getConfig().getConfigurationSection("simpleblocks").getKeys(false);
 		   for (String s : stackedblocks) {
 			   UUID uuid = UUID.fromString(s);
-			   Location location = Utils.getLoc(Main.data.getConfig().getString("simpleblocks."+s+".location"), false, false);
+			   Location location = Utils.getUtils().getLoc(Main.data.getConfig().getString("simpleblocks."+s+".location"), false, false);
 			   StackeableBlockType type = StackeableBlockType.valueOf(Main.data.getConfig().getString("simpleblocks."+s+".type"));
 			   SimpleBlock sblock = new SimpleBlock(uuid, type, location);
 			   StackeableManager.getManager().getSimpleBlocks().add(sblock);
@@ -314,9 +314,9 @@ public class DataManager {
 			 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(uuid);	
 			 int money = Main.islands.getConfig().getInt("islands."+s+".money");
 			 List<String> transactions = Main.islands.getConfig().getStringList("islands."+s+".transactions");
-			 Location spawn = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".spawn"), true,false);
-			 Location home = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".home"), true,false);
-			 Location warp = Utils.getLoc(Main.islands.getConfig().getString("islands."+s+".warp"), true,false);
+			 Location spawn = Utils.getUtils().getLoc(Main.islands.getConfig().getString("islands."+s+".spawn"), true,false);
+			 Location home = Utils.getUtils().getLoc(Main.islands.getConfig().getString("islands."+s+".home"), true,false);
+			 Location warp = Utils.getUtils().getLoc(Main.islands.getConfig().getString("islands."+s+".warp"), true,false);
 			 boolean warpenabled =	Main.islands.getConfig().getBoolean("islands."+s+".warpenabled");
 			 
 			 int space = Main.islands.getConfig().getInt("islands."+s+".space");
@@ -379,11 +379,11 @@ public class DataManager {
 			 int money = island.getMoney();
 			 List<String> transactions = island.getTransactions();
 			Main.islands.getConfig().set("islands."+uuid+".owner", owner.toString());
-			Main.islands.getConfig().set("islands."+uuid+".spawn", Utils.setLoc(spawn, true));
-			Main.islands.getConfig().set("islands."+uuid+".home", Utils.setLoc(home, true));
+			Main.islands.getConfig().set("islands."+uuid+".spawn", Utils.getUtils().setLoc(spawn, true));
+			Main.islands.getConfig().set("islands."+uuid+".home", Utils.getUtils().setLoc(home, true));
 			Main.islands.getConfig().set("islands."+uuid+".money", money);
 			Main.islands.getConfig().set("islands."+uuid+".transactions", transactions);
-			Main.islands.getConfig().set("islands."+uuid+".warp", Utils.setLoc(warp, true));
+			Main.islands.getConfig().set("islands."+uuid+".warp", Utils.getUtils().setLoc(warp, true));
 			Main.islands.getConfig().set("islands."+uuid+".warpenabled", warpenabled);
 						
 			Main.islands.getConfig().set("islands."+uuid+".hoppers", hoppers);

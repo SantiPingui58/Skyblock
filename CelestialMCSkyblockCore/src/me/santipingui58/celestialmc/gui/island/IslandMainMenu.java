@@ -42,9 +42,9 @@ public class IslandMainMenu extends MenuBuilder {
 				.addLore("§7Go to the Island Worth Menu.").build());
 		
 		s(27,new ItemBuilder(Material.CRAFTING_TABLE).setTitle("§bHome Location")
-				.addLore("§a"+ Utils.setLoc(island.getWarp(), false)).build());
+				.addLore("§a"+ Utils.getUtils().setLoc(island.getWarp(), false)).build());
 		s(28,new ItemBuilder(Material.CRAFTING_TABLE).setTitle("§bWarp Location")
-				.addLore("§a"+ Utils.setLoc(island.getWarp(), false)).build());
+				.addLore("§a"+ Utils.getUtils().setLoc(island.getWarp(), false)).build());
 		if (island.isWarpEnabled()) {
 			s(29,new ItemBuilder(Material.LIME_DYE).setTitle("§2Island Warp: §aENABLED")
 					.addLore("§7Click to disable the warp.").build());

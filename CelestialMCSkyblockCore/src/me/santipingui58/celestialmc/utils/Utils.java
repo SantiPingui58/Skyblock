@@ -1,6 +1,7 @@
 package me.santipingui58.celestialmc.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -9,11 +10,19 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
 
 public class Utils {
 	
-	
-	  public static String setLoc(Location loc, boolean pitch)
+	private static Utils manager;	
+	 public static Utils getUtils() {
+	        if (manager == null)
+	        	manager = new Utils();
+	        return manager;
+	    }
+	  public String setLoc(Location loc, boolean pitch)
 	  {
 	    if (pitch) {
 	      return loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + "," + loc.getYaw() + "," + loc.getPitch();
@@ -21,7 +30,7 @@ public class Utils {
 	    return loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
 	  }
 	  
-	  public static List<String> setLocs(List<Location> locs) {
+	  public List<String> setLocs(List<Location> locs) {
 		  List<String> list = new ArrayList<String>();
 			  for (Location loc : locs) {
 		      list.add(loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
@@ -29,7 +38,7 @@ public class Utils {
 			  return list;
 	  }
 
-	  public static Location getLoc(String path, boolean pitch,boolean add)
+	  public Location getLoc(String path, boolean pitch,boolean add)
 	  {
 	    Location loc = null;
 	    if (!pitch) {
@@ -48,7 +57,7 @@ public class Utils {
 	    return loc;
 	  }
 
-	  public static Location getLoc(String path)
+	  public Location getLoc(String path)
 	  {
 	    String[] locs = path.split(",");
 
@@ -57,7 +66,7 @@ public class Utils {
 	  }
 	  
 	  
-	  public static void debug(String s) {
+	  public void debug(String s) {
 		  Player p = Bukkit.getPlayer("SantiPingui58");
 		  if (Bukkit.getOnlinePlayers().contains(p))
 		  p.sendMessage(s);
@@ -65,14 +74,14 @@ public class Utils {
 	  
 	  
 	  
-	  public static Location getCenter(Location loc) {
+	  public Location getCenter(Location loc) {
 		    return new Location(loc.getWorld(),
 		        getRelativeCoord(loc.getBlockX()),
 		        getRelativeCoord(loc.getBlockY()),
 		        getRelativeCoord(loc.getBlockZ()));
 		}
 		 
-		private static double getRelativeCoord(int i) {
+		private double getRelativeCoord(int i) {
 		    double d = i;
 		    d = d < 0 ? d - .5 : d + .5;
 		    return d;
@@ -80,7 +89,7 @@ public class Utils {
 	  
 		
 		  @SuppressWarnings("deprecation")
-		public static boolean isSafeLocation(Location location) {
+		public boolean isSafeLocation(Location location) {
 		        Block feet = location.getBlock();
 		        if (!feet.getType().isTransparent() && !feet.getLocation().add(0, 1, 0).getBlock().getType().isTransparent()) {
 		            return false; // not transparent (will suffocate)
@@ -99,5 +108,26 @@ public class Utils {
 		        }
 		        return true;
 		    }
+		  
+			
+		  public int getEmptySlots(Inventory inventory) {
+		        ItemStack[] cont = inventory.getContents();
+		        int i = 0;
+		        for (ItemStack item : cont)
+		          if (item != null && item.getType() != Material.AIR) {
+		            i++;
+		          }
+		        return 36 - i;
+		    }
 		 
+		  
+		  public boolean hasEmptySpace(Inventory inventory,ItemStack item) {
+			  HashMap<Integer,ItemStack> map = inventory.addItem(item);
+			  if (map.isEmpty()) {
+				  inventory.removeItem(item);
+				  return true;
+			  }
+			  inventory.removeItem(item);
+			  return false;
+		  }
 }

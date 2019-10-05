@@ -155,19 +155,19 @@ public class SkyblockManager {
 		
 		Location home = island.getHome();
 		Location spawnpoint = island.getSpawnPoint();
-		if (Utils.isSafeLocation(home)) {
+		if (Utils.getUtils().isSafeLocation(home)) {
 			p.teleport(home);
 		} else {
-			if (Utils.isSafeLocation(home.getWorld().getHighestBlockAt(home).getLocation())) {
+			if (Utils.getUtils().isSafeLocation(home.getWorld().getHighestBlockAt(home).getLocation())) {
 				Location t = home.getWorld().getHighestBlockAt(home).getLocation();
 				t.setDirection(home.getDirection());
 				p.teleport(t);
 			} else {
 				p.sendMessage(Main.skyblock_prefix+ChatColor.RED+" Your Skyblock Island home was blocked, so you were teleported to your Skyblock Island Spawnpoint.");
-				if (Utils.isSafeLocation(spawnpoint)) {
+				if (Utils.getUtils().isSafeLocation(spawnpoint)) {
 					p.teleport(spawnpoint);
 				} else {
-					if (Utils.isSafeLocation(spawnpoint.getWorld().getHighestBlockAt(spawnpoint).getLocation())) {
+					if (Utils.getUtils().isSafeLocation(spawnpoint.getWorld().getHighestBlockAt(spawnpoint).getLocation())) {
 						Location t = spawnpoint.getWorld().getHighestBlockAt(spawnpoint).getLocation();
 						t.setDirection(spawnpoint.getDirection());
 						p.teleport(t);
@@ -188,10 +188,10 @@ public class SkyblockManager {
 		Player p = teleporter.getPlayer();
 		Location warp = cplayer.getIsland().getWarp();
 		
-		if (Utils.isSafeLocation(warp)) {
+		if (Utils.getUtils().isSafeLocation(warp)) {
 			p.teleport(warp);
 		} else {
-			if (Utils.isSafeLocation(warp.getWorld().getHighestBlockAt(warp).getLocation())) {
+			if (Utils.getUtils().isSafeLocation(warp.getWorld().getHighestBlockAt(warp).getLocation())) {
 				Location t = warp.getWorld().getHighestBlockAt(warp).getLocation();
 				t.setDirection(warp.getDirection());
 				p.teleport(t);
@@ -213,7 +213,7 @@ public class SkyblockManager {
 		}
 		
 		if (member.isOnline()) {
-			Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,false);
+			Location spawn = Utils.getUtils().getLoc(Main.config.getConfig().getString("spawn"), true,false);
 			member.getPlayer().teleport(spawn);
 			if (kicked) {
 				member.getPlayer().sendMessage(Main.skyblock_prefix+"§c You have been kicked from the Skyblock Island of §b" + island.getOwner().getOfflinePlayer().getName());

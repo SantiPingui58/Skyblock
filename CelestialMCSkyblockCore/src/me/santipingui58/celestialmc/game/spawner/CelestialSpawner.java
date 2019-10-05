@@ -13,7 +13,13 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+
+import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.CelestialPlayer;
+import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
+import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
 
 public class CelestialSpawner {
 
@@ -27,7 +33,8 @@ public class CelestialSpawner {
 	private int level;
 
 	private int spawnedmobs;
-	
+	private int oldamount;
+	private Hologram hologram;
 	private List<CelestialSpawner> stackedspawners = new ArrayList<CelestialSpawner>();
 	
 	public CelestialSpawner(UUID uuid, CelestialPlayer owner, Location location, SpawnerType type,int level) {
@@ -36,11 +43,12 @@ public class CelestialSpawner {
 		} else {
 			this.uuid = uuid;	
 		}
-		
+			
 		this.owner = owner;
 		this.location = location;
 		this.type = type;
 		this.level = level;
+		
 	}
 	
 	
@@ -78,10 +86,21 @@ public class CelestialSpawner {
 	}
 	public void place(Location l) {
 		this.location = l;
+		Location la = new Location(location.getWorld(),location.getBlockX(),location.getBlockY()+2,location.getBlockZ());
+		la = la.add( 0.5, 0.0, 0.5);
+		this.hologram = HologramsAPI.createHologram(Main.get(), la);
+		updateHologram();
+		SkyblockIsland island = SkyblockManager.getManager().getIslandByLocation(location);
+		if (island!=null) {
+			if (!island.getSpawners().contains(this)) {
+			island.getSpawners().add(this);
+			}
+		}
 	}
 	
 	public void pickUp() {
 		this.location = null;
+		this.oldamount = 0;
 	}
 	
 	public boolean isPlaced() {
@@ -114,6 +133,21 @@ public class CelestialSpawner {
 		return type;
 	}
 		
+	public Hologram getHologram() {
+		return this.hologram;
+	}
+	public void updateHologram() {		
+		if (this.oldamount!=getAmount()) {
+			this.oldamount = getAmount();
+		hologram.clearLines();
+		hologram.appendTextLine("§c§l"+getType().toString()+" SPAWNER §7("+getAmount()+")");
+		}
+	}
+	
+	public int getAmount() {
+		return this.stackedspawners.size()+1;
+	}
+	
 	public ItemStack getItem() {
 		ItemStack item = new ItemStack(Material.SPAWNER);
 		ItemMeta meta = item.getItemMeta();

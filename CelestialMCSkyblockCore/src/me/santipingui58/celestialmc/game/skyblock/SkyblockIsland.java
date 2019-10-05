@@ -15,6 +15,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import me.santipingui58.celestialmc.game.CelestialPlayer;
+import me.santipingui58.celestialmc.game.hopper.CelestialHopper;
+import me.santipingui58.celestialmc.game.spawner.CelestialSpawner;
 import me.santipingui58.celestialmc.game.stacking.SimpleBlock;
 import me.santipingui58.celestialmc.game.stacking.StackedBlock;
 
@@ -37,7 +39,8 @@ public class SkyblockIsland {
 	
 	private List<StackedBlock> stackedblocks = new ArrayList<StackedBlock>();
 	private List<SimpleBlock> blocks = new ArrayList<SimpleBlock>();
-	
+	private List<CelestialHopper> hoppers = new ArrayList<CelestialHopper>();
+	private List<CelestialSpawner> spawners = new ArrayList<CelestialSpawner>();
 	private int generation;
 	private int space;
 	private int maxspawners;
@@ -106,6 +109,12 @@ public class SkyblockIsland {
 		this.permissions = permissions;
 	}
 	
+	public List<CelestialHopper> getHoppers() {
+		return this.hoppers;
+	}
+	public List<CelestialSpawner> getSpawners() {
+		return this.spawners;
+	}
 	public List<StackedBlock> getStackedBlocks() {
 		return this.stackedblocks;
 	}

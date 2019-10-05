@@ -36,7 +36,7 @@ public class SpawnCommand implements CommandExecutor {
 			 if (args.length>0) {
 				 if (args[0].equalsIgnoreCase("setspawn")) {
 					 if (p.hasPermission("celestialmc.admin")) {
-						 Main.config.getConfig().set("spawn", Utils.setLoc(p.getLocation(), true));
+						 Main.config.getConfig().set("spawn", Utils.getUtils().setLoc(p.getLocation(), true));
 						 p.sendMessage(Main.prefix+ " §aSpawn location was set.");
 						 return true;
 					 }
@@ -44,7 +44,7 @@ public class SpawnCommand implements CommandExecutor {
 			 }
 			
 			 if (Main.config.getConfig().contains("spawn")) {
-				 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,true);
+				 Location spawn = Utils.getUtils().getLoc(Main.config.getConfig().getString("spawn"), true,true);
 				 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(p);
 				 cplayer.setLocation(PlayerLocation.SPAWN);
 				 p.teleport(spawn);

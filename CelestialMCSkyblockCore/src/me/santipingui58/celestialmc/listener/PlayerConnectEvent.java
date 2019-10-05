@@ -35,7 +35,7 @@ public class PlayerConnectEvent implements Listener {
 		board.updateTitle("§a§lCelestialMC");		 
 		PinguiScoreboard.getScoreboard().getPlayerScoreboards().put(cplayer, board);
 		 if (cplayer.getLocation().equals(PlayerLocation.SPAWN)) {
-			 Location spawn = Utils.getLoc(Main.config.getConfig().getString("spawn"), true,true);
+			 Location spawn = Utils.getUtils().getLoc(Main.config.getConfig().getString("spawn"), true,true);
 			 p.teleport(spawn);
 		 } else if (cplayer.getLocation().equals(PlayerLocation.OWN_ISLAND)) {
 			 p.teleport(cplayer.getIsland().getHome());

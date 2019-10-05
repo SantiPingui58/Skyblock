@@ -19,6 +19,9 @@ import org.bukkit.inventory.ItemStack;
 
 import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.CelestialPlayer;
+import me.santipingui58.celestialmc.game.Result;
+import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
+import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
 import me.santipingui58.celestialmc.gui.spawner.SpawnerMenu;
 public class SpawnerManager implements Listener {
 
@@ -43,6 +46,18 @@ public class SpawnerManager implements Listener {
 		 		 
 	 }
 	 
+	 
+	 public void removeSpawner(CelestialSpawner spawner) {
+		 try {
+		 spawner.getHologram().delete();
+		 SkyblockIsland island = SkyblockManager.getManager().getIslandByLocation(spawner.getLocation());
+		 if (island!=null) {
+			 if (island.getSpawners().contains(spawner)) {
+				 island.getSpawners().remove(spawner);
+			 }
+		 }
+	 } catch (Exception e) {}
+	 }
 	 
 	 public CelestialSpawner getSpawner(UUID uuid) {
 		 for (CelestialSpawner spawner : SpawnerManager.getManager().getSpawners()) {			
@@ -125,6 +140,16 @@ public class SpawnerManager implements Listener {
 	 @EventHandler
 	 public void onPlace(BlockPlaceEvent e) {
 		 if (e.getItemInHand().getType().equals(Material.SPAWNER)) {
+			 
+			SkyblockIsland island = SkyblockManager.getManager().getIslandByLocation(e.getBlock().getLocation());
+			if (island!=null) {
+				if (island.getSpawners().size()>=island.getMaxSpawnersLevel()) {
+					 SkyblockManager.getManager().getCelestialPlayer(e.getPlayer()).sendMessage("You have reached the limit of Spawners of this Skyblock Island!", Result.DENY);
+					 e.setCancelled(true);
+					 return;
+				}
+			}
+			
 			 if (!e.getBlockAgainst().getType().equals(Material.SPAWNER)) {
 			 ItemStack item = e.getItemInHand();
 			 if (item.hasItemMeta()) {
@@ -149,10 +174,10 @@ public class SpawnerManager implements Listener {
 		 }
 		
 			 } 
-	 }
 			 }
 	 }
-	 }
+			 }
+	 }	 
 	 }
 	 @EventHandler
 	 public void onBreak(BlockBreakEvent e) {
@@ -162,6 +187,7 @@ public class SpawnerManager implements Listener {
 				 if (spawner.getLocation().equals(e.getBlock().getLocation())) {
 					 e.getPlayer().sendMessage(Main.skyblock_prefix+ " §aYou have picked up an Spawner!");
 					 e.setCancelled(true);
+					 removeSpawner(spawner);
 					 e.getBlock().setType(Material.AIR);
 					 e.getBlock().getWorld().dropItem(e.getBlock().getLocation(), spawner.getItem());
 					 spawner.pickUp();			

@@ -24,6 +24,7 @@ import me.santipingui58.celestialmc.commands.SpawnerCommand;
 import me.santipingui58.celestialmc.game.CelestialPlayer;
 import me.santipingui58.celestialmc.game.DataManager;
 import me.santipingui58.celestialmc.game.chest.ChestManager;
+import me.santipingui58.celestialmc.game.hopper.HopperManager;
 import me.santipingui58.celestialmc.game.spawner.SpawnerManager;
 import me.santipingui58.celestialmc.game.stacking.StackeableManager;
 import me.santipingui58.celestialmc.listener.PlayerChatEvent;
@@ -31,11 +32,7 @@ import me.santipingui58.celestialmc.listener.PlayerConnectEvent;
 import me.santipingui58.celestialmc.listener.PlayerListener;
 import me.santipingui58.celestialmc.listener.SkyblockListener;
 import me.santipingui58.celestialmc.scoreboard.PinguiScoreboard;
-import me.santipingui58.celestialmc.task.ChestTask;
-import me.santipingui58.celestialmc.task.MinuteTask;
-import me.santipingui58.celestialmc.task.PlayerMoveTask;
-import me.santipingui58.celestialmc.task.StackedBlockHologramsTask;
-import me.santipingui58.celestialmc.task.TabTask;
+import me.santipingui58.celestialmc.task.TaskManager;
 import me.santipingui58.celestialmc.utils.Configuration;
 import me.santipingui58.celestialmc.utils.FastBoard;
 import net.milkbowl.vault.economy.Economy;
@@ -93,7 +90,7 @@ public class Main extends JavaPlugin {
 		File schematicsFolder =  new File( getDataFolder(),"schematics");
 		if( !schematicsFolder.exists()) schematicsFolder.mkdir();
 	
-		registerTasks();
+		TaskManager.getManager().task();
 		registerEvents();
 		DataManager.getManager().loadIslands();
 		DataManager.getManager().loadBlocks();
@@ -120,6 +117,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChestManager(), this);
 		getServer().getPluginManager().registerEvents(new SpawnerManager(), this);
 		getServer().getPluginManager().registerEvents(new StackeableManager(), this);
+		getServer().getPluginManager().registerEvents(new HopperManager(), this);
 		getServer().getPluginManager().registerEvents(new PlayerChatEvent(), this);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 		getServer().getPluginManager().registerEvents(new PlayerConnectEvent(), this);
@@ -133,14 +131,6 @@ public class Main extends JavaPlugin {
 		 getCommand("admin").setExecutor(new AdminCommand());
 	}
 	
-	
-	private void registerTasks() {
-		new PlayerMoveTask();
-		new TabTask();
-		new ChestTask();
-		new StackedBlockHologramsTask();
-		new MinuteTask();
-	}
 	
 	
 	private boolean setupEconomy() {
