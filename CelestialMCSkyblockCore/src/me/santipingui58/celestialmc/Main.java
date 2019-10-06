@@ -18,6 +18,7 @@ import org.bukkit.scoreboard.Team;
 
 import me.santipingui58.celestialmc.commands.AdminCommand;
 import me.santipingui58.celestialmc.commands.ChestCommand;
+import me.santipingui58.celestialmc.commands.HopperCommand;
 import me.santipingui58.celestialmc.commands.IslandCommand;
 import me.santipingui58.celestialmc.commands.SpawnCommand;
 import me.santipingui58.celestialmc.commands.SpawnerCommand;
@@ -128,6 +129,7 @@ public class Main extends JavaPlugin {
 		 getCommand("spawn").setExecutor(new SpawnCommand());
 		 getCommand("chest").setExecutor(new ChestCommand());
 		 getCommand("spawner").setExecutor(new SpawnerCommand());
+		 getCommand("hopper").setExecutor(new HopperCommand());
 		 getCommand("admin").setExecutor(new AdminCommand());
 	}
 	

@@ -58,7 +58,7 @@ public class ChestManager implements Listener {
 		 if (e.getItemInHand().getType().equals(Material.CHEST)) {
 			 ItemStack chest = e.getItemInHand();
 			 if (chest.getItemMeta().getLore()!=null) {
-			 if (chest.getItemMeta().getLore().size()>0) {
+			 if (chest.getItemMeta().getLore().size()>8) {
 				 String string = ChatColor.stripColor(chest.getItemMeta().getLore().get(7));	
 				 if (string!=null) {
 					 try {

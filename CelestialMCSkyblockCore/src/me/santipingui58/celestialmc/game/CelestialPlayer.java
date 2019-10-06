@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -187,9 +188,9 @@ public class CelestialPlayer {
 			msg = msg.replace("!$", "§b");
 			msg = msg.replace("!%", "§e");
 			if (result.equals(Result.ALLOW)) {			
-				this.getPlayer().sendMessage(Main.skyblock_prefix + " §a" +msg);
+				this.getPlayer().sendMessage(Main.skyblock_prefix + " §a" +ChatColor.translateAlternateColorCodes('&', msg));
 			} else {
-				this.getPlayer().sendMessage(Main.skyblock_prefix + " §c" +msg);
+				this.getPlayer().sendMessage(Main.skyblock_prefix + " §c" +ChatColor.translateAlternateColorCodes('&', msg));
 			}
 		}
 	}

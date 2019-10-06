@@ -115,8 +115,8 @@ public class HopperManager implements Listener {
 			 ItemStack item = e.getItemInHand();
 			 if (item.hasItemMeta()) {
 				 if (item.getItemMeta().hasLore()) {
-			 if (item.getItemMeta().getLore().size()>=8) {
-				 String string = ChatColor.stripColor(item.getItemMeta().getLore().get(7));			
+			 if (item.getItemMeta().getLore().size()>=9) {
+				 String string = ChatColor.stripColor(item.getItemMeta().getLore().get(8));			
 				 UUID uuid = null;
 				 try {
 				  uuid = UUID.fromString(string);

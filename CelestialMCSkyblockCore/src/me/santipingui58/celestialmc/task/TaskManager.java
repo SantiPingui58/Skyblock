@@ -6,8 +6,12 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Hopper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
@@ -22,6 +26,8 @@ import me.santipingui58.celestialmc.game.chest.AutoBlockMaterial;
 import me.santipingui58.celestialmc.game.chest.AutoSellChest;
 import me.santipingui58.celestialmc.game.chest.ChestManager;
 import me.santipingui58.celestialmc.game.chest.MaterialSellValue;
+import me.santipingui58.celestialmc.game.hopper.CelestialHopper;
+import me.santipingui58.celestialmc.game.hopper.HopperManager;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
 import me.santipingui58.celestialmc.game.spawner.CelestialSpawner;
@@ -29,6 +35,7 @@ import me.santipingui58.celestialmc.game.spawner.SpawnerManager;
 import me.santipingui58.celestialmc.game.stacking.StackeableManager;
 import me.santipingui58.celestialmc.game.stacking.StackedBlock;
 import me.santipingui58.celestialmc.scoreboard.PinguiScoreboard;
+import me.santipingui58.celestialmc.utils.Utils;
 
 public class TaskManager {
 
@@ -214,7 +221,40 @@ public class TaskManager {
 	 }
 	 
 	 private void hopperTask() {
-		 
+		 for (CelestialHopper hopper : HopperManager.getManager().getHoppers()) {
+			 if (hopper.isPlaced()) {
+				 Hopper bukkithopper = (Hopper) hopper.getLocation().getBlock().getState();
+				 if (hopper.getLevel()>=4) {
+					 if (hopper.isAutoSellActivated()) {
+					 for (ItemStack i : bukkithopper.getInventory().getContents()) {
+						  if (i!=null) {
+	   						  if (!i.getType().equals(Material.AIR)) {	   							  
+	   						  int v = MaterialSellValue.getValue(i.getType());
+	   						  int money = hopper.getMoney();
+	   						hopper.setMoney(money+v);
+	   						  i.setAmount(i.getAmount()-1);
+	   					  }
+	   				  }						  
+					 }
+					 }
+				 }		 
+				 if (hopper.getLevel()>=3) {
+					 if (hopper.isChunkPickUpActivated()) {
+					 for (Entity e : hopper.getLocation().getChunk().getEntities()) {
+						 if (e instanceof Item) {
+							 Item item = (Item) e;
+							
+							if (Utils.getUtils().hasEmptySpace(bukkithopper.getInventory(), item.getItemStack())) {
+								bukkithopper.getInventory().addItem(item.getItemStack());
+								item.getWorld().spawnParticle(Particle.CLOUD,item.getLocation().getX(),item.getLocation().getY(),item.getLocation().getZ(),10);
+								item.remove();							
+							 }
+						 }
+					 }
+				 }
+				 }
+			 }
+		 }
 	 }
 	 
 	 private void tabTask() {

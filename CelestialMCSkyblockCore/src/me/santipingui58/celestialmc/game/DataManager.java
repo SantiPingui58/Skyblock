@@ -16,6 +16,8 @@ import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.chest.AutoBlockChest;
 import me.santipingui58.celestialmc.game.chest.AutoSellChest;
 import me.santipingui58.celestialmc.game.chest.ChestManager;
+import me.santipingui58.celestialmc.game.hopper.CelestialHopper;
+import me.santipingui58.celestialmc.game.hopper.HopperManager;
 import me.santipingui58.celestialmc.game.skyblock.PlayerPermissions;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
@@ -111,6 +113,7 @@ public class DataManager {
 		 Main.data.getConfig().set("autosellchests", null);
 		 Main.data.getConfig().set("stackedblocks", null);
 		 Main.data.getConfig().set("simpleblocks", null);
+		 Main.data.getConfig().set("hoppers", null);
 		 
 		for (AutoBlockChest chests : ChestManager.getManager().getAutoBlockChests()) {
 			UUID uuid = chests.getUUID();
@@ -161,6 +164,28 @@ public class DataManager {
 			Main.data.getConfig().set("simpleblocks."+uuid+".type", type.toString());
 		}
 		
+		
+		for (CelestialHopper hopper : HopperManager.getManager().getHoppers()) {
+			String uuid = hopper.getUUID().toString();
+			Location location = hopper.getLocation();
+			CelestialPlayer owner = hopper.getOwner();
+			int money = hopper.getMoney();
+			boolean isplaced = hopper.isPlaced();
+			
+			boolean autosell = hopper.isAutoSellActivated();
+			boolean chunk = hopper.isChunkPickUpActivated();
+			int level = hopper.getLevel();
+			
+			Main.data.getConfig().set("hoppers."+uuid+".owner", owner.getUUID().toString());
+			Main.data.getConfig().set("hoppers."+uuid+".money", money);
+			Main.data.getConfig().set("hoppers."+uuid+".level", level);
+			Main.data.getConfig().set("hoppers."+uuid+".autosell", autosell);
+			Main.data.getConfig().set("hoppers."+uuid+".chunk", chunk);
+			if (isplaced) {
+			Main.data.getConfig().set("hoppers."+uuid+".location", Utils.getUtils().setLoc(location, false));
+		}
+			
+		}
 		
 		
 		
@@ -249,6 +274,31 @@ public class DataManager {
 					 abchest.place(location);
 				 }
 				 ChestManager.getManager().getAutoSellChests().add(abchest);			 
+			 }
+		 }
+		 
+		 if (Main.data.getConfig().contains("hoppers")) {
+			 Set<String> hoppers = Main.data.getConfig().getConfigurationSection("hoppers").getKeys(false);
+			 for (String s : hoppers) {
+				 UUID uuid = UUID.fromString(s);
+				 CelestialPlayer owner = SkyblockManager.getManager().getCelestialPlayer(UUID.fromString(Main.data.getConfig().getString("hoppers."+s+".owner")));
+				 int money = Main.data.getConfig().getInt("hoppers."+s+".money");
+				 int level = Main.data.getConfig().getInt("hoppers."+s+".level");		
+				 
+				 boolean autosell = Main.data.getConfig().getBoolean("hoppers."+s+".autosell");
+				 boolean chunk = Main.data.getConfig().getBoolean("hoppers."+s+".chunk");
+				 Location location = null;
+				 if (Main.data.getConfig().contains("hoppers."+s+".location")) {
+					 location = Utils.getUtils().getLoc(Main.data.getConfig().getString("hoppers."+s+".location"),false,false);
+				 }
+				 
+					 CelestialHopper hopper = new CelestialHopper(uuid,owner,location,level);
+					 hopper.setMoney(money);
+					 if (chunk) hopper.activeChunkPickUp();
+					 if (autosell) hopper.activeAutoSell();
+					 
+					 HopperManager.getManager().getHoppers().add(hopper);					 
+				 
 			 }
 		 }
 		 

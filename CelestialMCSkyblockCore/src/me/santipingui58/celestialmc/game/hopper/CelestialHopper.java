@@ -28,6 +28,7 @@ public class CelestialHopper {
 	private int level;
 	private int money;
 	private boolean isautosellactivated;
+	private boolean ischunkpickupactivated;
 	
 	private boolean transfering;
 	private Inventory destiny;
@@ -62,6 +63,19 @@ public class CelestialHopper {
 	public void desactivateAutoSell() {
 		this.isautosellactivated = false;
 	}
+	
+	
+	public boolean isChunkPickUpActivated() {
+		return this.ischunkpickupactivated;
+	}
+	public void activeChunkPickUp() {
+		this.ischunkpickupactivated = true;
+	}
+	
+	public void desactiveChunkPickUp() {
+		this.ischunkpickupactivated = false;
+	}
+	
 	
 	public boolean isTransfering() {
 		return this.transfering;
@@ -129,6 +143,7 @@ public class CelestialHopper {
 		List<String> lore = new ArrayList<String>();
 		lore.add("§7Place this hopper to");
 		lore.add("§7transfer items to another hoppers or chest.");
+		lore.add("§7(Right click while sneaking to open Hopper Menu.)");
 		lore.add(" ");
 		lore.add("§3§lLevel: " + this.level);
 		lore.add(" ");
@@ -167,9 +182,13 @@ public class CelestialHopper {
 				
 				if (i<source.getContents().length) {
 					try {
-					ItemStack item = new ItemStack(source.getItem(i).getType(),t);
-					
-				int a = source.getItem(i).getAmount()-t;
+						
+						if (source.getItem(i).getAmount()<t) {
+							t = source.getItem(i).getAmount();
+						}
+						
+					ItemStack item = new ItemStack(source.getItem(i).getType(),t);				
+					int a = source.getItem(i).getAmount()-t;
 				source.getItem(i).setAmount(a);
 				HashMap<Integer,ItemStack> map = destiny.addItem(item);
 				if (!map.isEmpty()) {
