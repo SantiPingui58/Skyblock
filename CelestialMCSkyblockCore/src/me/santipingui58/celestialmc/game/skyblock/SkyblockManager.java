@@ -32,6 +32,8 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.CelestialPlayer;
 import me.santipingui58.celestialmc.game.DataManager;
+import me.santipingui58.celestialmc.game.Result;
+import me.santipingui58.celestialmc.utils.RandomCollection;
 import me.santipingui58.celestialmc.utils.Utils;
 
 
@@ -77,11 +79,10 @@ public class SkyblockManager {
 			int x = list.get(0);
 			int y = 100;
 			int z = list.get(1);
-			 Location location = new Location(Bukkit.getWorld("skyblock"),x,y,z);
+			Location mainlocation = new Location(Bukkit.getWorld("skyblock"),x,y,z);
 			 HashMap<CelestialPlayer,List<PlayerPermissions>> permissions = new HashMap<CelestialPlayer,List<PlayerPermissions>>();
-			 SkyblockIsland island = new SkyblockIsland(null,0,new ArrayList<String>(), cplayer, location,1,null,false,null, permissions,1,1,1,1,1);
-			 DataManager.getManager().getIslands().add(island);
-			 
+			 SkyblockIsland main = new SkyblockIsland(null,0,new ArrayList<String>(), cplayer, mainlocation,1,null,false,null, permissions,1,1,1,1,1);		 			 
+			 DataManager.getManager().getIslands().add(main);			 
 			 File file = new File( Main.get().getDataFolder(),"schematics/skyblock_island.schem");
 			 Clipboard clipboard = null;
 			 ClipboardFormat format = ClipboardFormats.findByFile(file);
@@ -93,7 +94,7 @@ public class SkyblockManager {
 				e.printStackTrace();
 			}
 			 
-			 try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(location.getWorld()), -1)) {
+			 try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(new BukkitWorld(mainlocation.getWorld()), -1)) {
 				    Operation operation = new ClipboardHolder(clipboard)
 				            .createPaste(editSession)
 				            .to(BlockVector3.at(x, y, z))
@@ -105,9 +106,9 @@ public class SkyblockManager {
 						e.printStackTrace();
 					}
 				}
-			 
+			 			 
 			 if (cplayer.isOnline()) {
-			 cplayer.getPlayer().teleport(island.getSpawnPoint());
+			 cplayer.getPlayer().teleport(main.getSpawnPoint());
 			 }
 		 }
 		 
@@ -231,4 +232,37 @@ public class SkyblockManager {
 		}
 	}
 
+	
+	
+	public void giveCrateKey(CelestialPlayer cplayer) {
+		 RandomCollection<String> random = new RandomCollection<String>();
+		 random.add(940, "None");
+		 random.add(10, "Vote");
+		 random.add(10,"Spawner");
+		 random.add(10,"Rare");
+		 random.add(10, "Epic");
+		 random.add(10, "Celestial");
+		 random.add(10, "Monthly");
+		 
+		 String result = random.next();
+		 if (result.equalsIgnoreCase("Vote")) {
+			 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "crates key Vote " + cplayer.getOfflinePlayer().getName());
+			 cplayer.sendMessage("&e&lYou have found a &a&lVote Crate Key&e&l!", Result.ALLOW);
+		 } else if (result.equalsIgnoreCase("Spawner")) {
+			 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "crates key Spawner " + cplayer.getOfflinePlayer().getName());
+			 cplayer.sendMessage("&e&lYou have found a &a&lSpawner Crate Key&e&l!", Result.ALLOW);
+		 } else if (result.equalsIgnoreCase("Rare")) {
+			 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "crates key Rare " + cplayer.getOfflinePlayer().getName());
+			 cplayer.sendMessage("&e&lYou have found a &a&lRare Crate Key&e&l!", Result.ALLOW);
+		 } else if (result.equalsIgnoreCase("Epic")) {
+			 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "crates key Epic " + cplayer.getOfflinePlayer().getName());
+			 cplayer.sendMessage("&e&lYou have found a &a&lEpic Crate Key&e&l!", Result.ALLOW);
+		 } else if (result.equalsIgnoreCase("Celestial")) {
+			 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "crates key Celestial " + cplayer.getOfflinePlayer().getName());
+			 cplayer.sendMessage("&e&lYou have found a &a&lCelestial Crate Key&e&l!", Result.ALLOW);
+		 } else if (result.equalsIgnoreCase("Monthly")) {
+			 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "crates key Monthly " + cplayer.getOfflinePlayer().getName());
+			 cplayer.sendMessage("&e&lYou have found a &a&lMonthly Crate Key&e&l!", Result.ALLOW);
+		 }
+	}
 }

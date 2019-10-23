@@ -42,9 +42,11 @@ public class DataManager {
 	 
 	 private List<SkyblockIsland> islands = new ArrayList<SkyblockIsland>();
 	 private List<CelestialPlayer> players = new ArrayList<CelestialPlayer>();
+	 
 	 public List<SkyblockIsland> getIslands() {
 		 return this.islands;
 	 }
+	 
 	 
 	 public List<CelestialPlayer> getPlayers() {
 		 return this.players;
@@ -364,6 +366,7 @@ public class DataManager {
 			 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(uuid);	
 			 int money = Main.islands.getConfig().getInt("islands."+s+".money");
 			 List<String> transactions = Main.islands.getConfig().getStringList("islands."+s+".transactions");
+			 
 			 Location spawn = Utils.getUtils().getLoc(Main.islands.getConfig().getString("islands."+s+".spawn"), true,false);
 			 Location home = Utils.getUtils().getLoc(Main.islands.getConfig().getString("islands."+s+".home"), true,false);
 			 Location warp = Utils.getUtils().getLoc(Main.islands.getConfig().getString("islands."+s+".warp"), true,false);

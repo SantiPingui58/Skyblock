@@ -61,8 +61,7 @@ public class PinguiScoreboard {
 				LuckPermsApi api = null;
 				 RegisteredServiceProvider<LuckPermsApi> provider = Bukkit.getServicesManager().getRegistration(LuckPermsApi.class);
 				 if (provider != null) {
-				      api = provider.getProvider();
-				     
+				      api = provider.getProvider();				     
 				 }			 
 				 User user = api.getUser(p.getUniqueId());
 				 MetaData metaData = user.getCachedData().getMetaData(Contexts.allowAll());

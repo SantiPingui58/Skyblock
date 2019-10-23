@@ -20,12 +20,12 @@ import me.santipingui58.celestialmc.game.spawner.CelestialSpawner;
 import me.santipingui58.celestialmc.game.stacking.SimpleBlock;
 import me.santipingui58.celestialmc.game.stacking.StackedBlock;
 
-public class SkyblockIsland {
+public class SkyblockIsland implements Comparable<SkyblockIsland> {
 
 	private UUID uuid;
+	
 	private Location spawnpoint;	
 	private Location home;
-	
 	private int money;
 	private List<String> transactions_history;
 	
@@ -50,7 +50,6 @@ public class SkyblockIsland {
 	public SkyblockIsland(UUID uuid,int money,List<String> transactions,CelestialPlayer owner,Location spawnpoint,int space,Location warp,
 			boolean warpenabled,List<CelestialPlayer> members, HashMap<CelestialPlayer,List<PlayerPermissions>> permissions,
 			int generation, int maxspawners, int maxhoppers,int maxminions,int maxplayers) {
-		
 		if (generation==0) {
 			this.generation = 1;
 		} else {
@@ -154,9 +153,6 @@ public class SkyblockIsland {
 		return this.money;
 	}
 	
-	public void setMoneys(int i) {
-		this.money = i;
-	}
 	
 	public void depositMoney(int amount,String name, String date) {
 		this.money = this.money+ amount;
@@ -176,11 +172,13 @@ public class SkyblockIsland {
 	}
 	
 	public void interest() {
+		if (this.money>0) {
 		int interest = this.money/200;
 		this.money = this.money + interest;
 		Date now = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");	
 		this.transactions_history.add("§a+ §6$"+interest + " §7by §bBank interest §7("+format.format(now)+")");
+	}
 	}
 	
 	public int getMaxPlayers() {
@@ -376,6 +374,11 @@ public class SkyblockIsland {
 	
 	public CelestialPlayer getOwner() {
 		return this.owner;
+	}
+
+	@Override
+	public int compareTo(SkyblockIsland arg0) {
+		return 0;
 	}
 	
 	

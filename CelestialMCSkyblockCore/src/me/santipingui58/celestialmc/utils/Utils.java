@@ -1,8 +1,10 @@
 package me.santipingui58.celestialmc.utils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,6 +14,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
+
+import me.lucko.luckperms.api.LuckPermsApi;
+import me.lucko.luckperms.api.Node;
+import me.lucko.luckperms.api.User;
+import me.santipingui58.celestialmc.game.CelestialPlayer;
+import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 
 
 public class Utils {
@@ -130,4 +139,57 @@ public class Utils {
 			  inventory.removeItem(item);
 			  return false;
 		  }
+		  
+		  
+			public TreeMap<SkyblockIsland, Integer> sortMapByValue(TreeMap<SkyblockIsland, Integer> map2){
+				Comparator<SkyblockIsland> comparator = new ValueComparator(map2);
+				TreeMap<SkyblockIsland, Integer> result = new TreeMap<SkyblockIsland, Integer>(comparator);
+				result.putAll(map2);
+				return result;
+			}
+			
+			
+			public void addPermission(CelestialPlayer cplayer,String permission) {
+				LuckPermsApi api = null;
+				 RegisteredServiceProvider<LuckPermsApi> provider = Bukkit.getServicesManager().getRegistration(LuckPermsApi.class);
+				 if (provider != null) {
+				      api = provider.getProvider();
+				     
+				 }			 
+				 User user = api.getUser(cplayer.getUUID());
+				 Node node = api.getNodeFactory().newBuilder(permission).build();
+				 user.setPermission(node);
+				 
+				
+				 
+			}
+			
+			public void removePermission(CelestialPlayer cplayer,String permission) {
+				LuckPermsApi api = null;
+				 RegisteredServiceProvider<LuckPermsApi> provider = Bukkit.getServicesManager().getRegistration(LuckPermsApi.class);
+				 if (provider != null) {
+				      api = provider.getProvider();
+				     
+				 }			 
+				 User user = api.getUser(cplayer.getUUID());		
+				 Node node = null;
+				 for (Node n : user.getAllNodes()) {
+					 if (n.getPermission().equalsIgnoreCase(permission)) {
+						 node = n;
+						 break;
+					 }
+				 }
+				 
+				 user.unsetPermission(node);
+			}
+			
+			public ItemStack getItemByMaterial(Player p, Material material) {
+		        for (ItemStack item : p.getInventory()) {
+		        	if (item.getType().equals(material)) {
+		        		return item;
+		        	}
+		        }
+		        return null;
+		    }
 }
+

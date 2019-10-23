@@ -12,7 +12,10 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
@@ -59,12 +62,14 @@ public class TaskManager {
 		 Task move = new Task(TaskType.MOVE,1);
 		 Task hologram = new Task(TaskType.HOLOGRAM,4);
 		 Task tab = new Task(TaskType.TAB,4);
+		 Task haste = new Task(TaskType.HASTE,10);
 		this.tasks.add(chest);
 		this.tasks.add(hopper);
 		this.tasks.add(minute);
 		this.tasks.add(move);
 		this.tasks.add(hologram);
 		this.tasks.add(tab);	
+		this.tasks.add(haste);	
 	 }
 	 private void t() {
 		 Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Main.get(), new Runnable() {
@@ -97,6 +102,8 @@ public class TaskManager {
 			 moveTask();
 		 } else if (task.getType().equals(TaskType.TAB)) {
 			 tabTask();
+		 } else if (task.getType().equals(TaskType.HASTE)) {
+			 hasteTask();
 		 }
 	 }
 	 
@@ -260,5 +267,21 @@ public class TaskManager {
 	 private void tabTask() {
 		  PinguiScoreboard.getScoreboard().setTags();
    	   PinguiScoreboard.getScoreboard().scoreboard();
+	 }
+	 
+	 private void hasteTask() {
+		 for (Player p : Bukkit.getOnlinePlayers()) {
+			 CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(p);
+			 if (cplayer.getLocation().equals(PlayerLocation.OWN_ISLAND)) {
+				 if (cplayer.getRank().toLevel()>=11) {
+					 if (cplayer.isHasteBoost()) {
+				 p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,Integer.MAX_VALUE,0));
+				 return;
+			 }
+				 }
+			 } 
+			 p.removePotionEffect(PotionEffectType.FAST_DIGGING);
+			 
+		 }
 	 }
 }

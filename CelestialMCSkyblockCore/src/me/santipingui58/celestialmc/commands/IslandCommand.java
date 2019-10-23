@@ -21,6 +21,7 @@ import me.santipingui58.celestialmc.game.skyblock.PlayerPermissions;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockManager;
 import me.santipingui58.celestialmc.gui.island.IslandMainMenu;
+import me.santipingui58.celestialmc.gui.island.IslandWorthTopMenu;
 import me.santipingui58.celestialmc.gui.island.PlayerPermissionsMenu;
 import me.santipingui58.celestialmc.utils.Utils;
 
@@ -373,6 +374,8 @@ public class IslandCommand implements CommandExecutor {
 				 } else {
 					 sendHelpCommands(p);
 				 }
+			 } else if (args[0].equalsIgnoreCase("top")) {
+				 new IslandWorthTopMenu(p).o(p);
 			 }else {
 				sendHelpCommands(p);
 			 }

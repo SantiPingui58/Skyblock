@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import me.santipingui58.celestialmc.game.DataManager;
 import me.santipingui58.celestialmc.game.stacking.SimpleBlock;
 import me.santipingui58.celestialmc.game.stacking.StackeableBlockType;
 import me.santipingui58.celestialmc.game.stacking.StackedBlock;
+import me.santipingui58.celestialmc.utils.Utils;
 
 public class WorthManager {
 
@@ -18,6 +21,9 @@ public class WorthManager {
 	        return manager;
 	    }
 	
+	private TreeMap<SkyblockIsland, Integer> worth = new TreeMap<SkyblockIsland,Integer>();
+	
+
 	
 	public int getTotalWorth(SkyblockIsland island) {
 		int totalworth = 0;
@@ -37,6 +43,7 @@ public class WorthManager {
 		worth = amount*type.getValue();
 		return worth;
 	}
+	
 	
 	public HashMap<StackeableBlockType,Integer> getAllBlocksAmount(SkyblockIsland island) {		
 		HashMap<StackeableBlockType,Integer> hashmap = new HashMap<StackeableBlockType,Integer>();
@@ -86,4 +93,27 @@ public class WorthManager {
 		}
 		return amount;
 	}
+	
+	public TreeMap<SkyblockIsland,Integer> getWorthHashMap() {
+		return this.worth;
+	}
+	
+	public void sortWorthTop() {
+		this.worth.clear();
+		TreeMap<SkyblockIsland, Integer> hashmap = new TreeMap<SkyblockIsland,Integer>();
+		for (SkyblockIsland island : DataManager.getManager().getIslands()) {
+			int w = getTotalWorth(island);
+			hashmap.put(island, w);
+		}
+	this.worth = Utils.getUtils().sortMapByValue(hashmap);
+	
+	}
+	
+	public TreeMap<SkyblockIsland,Integer> getWorthTopFromTo(int ini,int fin) {
+		return this.worth;
+	}
+	
+	
+	
 }
+

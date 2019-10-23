@@ -16,10 +16,12 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
+import me.santipingui58.celestialmc.commands.AbilitiesCommand;
 import me.santipingui58.celestialmc.commands.AdminCommand;
 import me.santipingui58.celestialmc.commands.ChestCommand;
 import me.santipingui58.celestialmc.commands.HopperCommand;
 import me.santipingui58.celestialmc.commands.IslandCommand;
+import me.santipingui58.celestialmc.commands.RankUpCommand;
 import me.santipingui58.celestialmc.commands.SpawnCommand;
 import me.santipingui58.celestialmc.commands.SpawnerCommand;
 import me.santipingui58.celestialmc.game.CelestialPlayer;
@@ -131,7 +133,10 @@ public class Main extends JavaPlugin {
 		 getCommand("spawner").setExecutor(new SpawnerCommand());
 		 getCommand("hopper").setExecutor(new HopperCommand());
 		 getCommand("admin").setExecutor(new AdminCommand());
+		 getCommand("abilities").setExecutor(new AbilitiesCommand());
+		 getCommand("rankup").setExecutor(new RankUpCommand());
 	}
+		 
 	
 	
 	
