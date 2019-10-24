@@ -1,0 +1,23 @@
+name: CelestialCore
+main: me.santipingui58.celestialmc.Main
+version: 0.0.7
+api-version: 1.13
+commands:
+    island:
+        aliases: [is]
+    spawn:
+        description: Spawn
+    chest:
+        description: Block Chest
+    spawner:
+        description: Spawner
+    admin:
+        description: Admin
+    hopper:
+        description: Hopper
+    abilities:
+        aliases: [ab]
+        description: Ab
+    rankup:
+        alies: [rank]
+        description: Rank Up
