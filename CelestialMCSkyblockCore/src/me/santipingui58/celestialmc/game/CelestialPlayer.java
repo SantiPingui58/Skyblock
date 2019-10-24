@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import me.santipingui58.celestialmc.Main;
 import me.santipingui58.celestialmc.game.hopper.CelestialHopper;
-import me.santipingui58.celestialmc.game.rank.Rank;
 import me.santipingui58.celestialmc.game.skyblock.SkyblockIsland;
 import me.santipingui58.celestialmc.game.spawner.CelestialSpawner;
 import me.santipingui58.celestialmc.utils.Utils;
@@ -23,6 +22,7 @@ public class CelestialPlayer {
  
 	private UUID uuid;
 	private PlayerLocation location;
+	private PlayerOptions options;
 	private Rank rank;
 	private Location prevLocation;
 	
@@ -38,11 +38,20 @@ public class CelestialPlayer {
 	private CelestialHopper openhoppergui;
 	private int worthtoppage;
 		
-	public CelestialPlayer(UUID uuid, boolean fly) {
+	public CelestialPlayer(UUID uuid, boolean fly,PlayerOptions options) {
 		this.rank = Rank.SKYGOD;
 		this.uuid = uuid;		
 		this.fly = fly;
 		this.location = PlayerLocation.SPAWN;
+		if (options == null) {
+			this.options = new PlayerOptions(true,true);
+		} else {
+			this.options = options;
+		}
+	}
+	
+	public PlayerOptions getOptions() {
+		return this.options;
 	}
 	
 	public Rank getRank() {

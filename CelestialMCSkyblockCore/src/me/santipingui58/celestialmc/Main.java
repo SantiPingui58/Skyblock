@@ -21,6 +21,7 @@ import me.santipingui58.celestialmc.commands.AdminCommand;
 import me.santipingui58.celestialmc.commands.ChestCommand;
 import me.santipingui58.celestialmc.commands.HopperCommand;
 import me.santipingui58.celestialmc.commands.IslandCommand;
+import me.santipingui58.celestialmc.commands.OptionsCommand;
 import me.santipingui58.celestialmc.commands.RankUpCommand;
 import me.santipingui58.celestialmc.commands.SpawnCommand;
 import me.santipingui58.celestialmc.commands.SpawnerCommand;
@@ -135,6 +136,7 @@ public class Main extends JavaPlugin {
 		 getCommand("admin").setExecutor(new AdminCommand());
 		 getCommand("abilities").setExecutor(new AbilitiesCommand());
 		 getCommand("rankup").setExecutor(new RankUpCommand());
+		 getCommand("options").setExecutor(new OptionsCommand());
 	}
 		 
 	

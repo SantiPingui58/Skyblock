@@ -4,10 +4,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import me.santipingui58.celestialmc.gui.abilities.RankUpMenu;
+
+import me.santipingui58.celestialmc.gui.island.PlayerOptionsMenu;
 
 
-public class RankUpCommand implements CommandExecutor {
+public class OptionsCommand implements CommandExecutor {
 
 	
 	
@@ -20,9 +21,9 @@ public class RankUpCommand implements CommandExecutor {
 			
 		} else {
 	
-		if(cmd.getName().equalsIgnoreCase("rankup")) {
+		if(cmd.getName().equalsIgnoreCase("options")) {
 			Player p = (Player) sender;
-			new RankUpMenu(p).o(p);
+			new PlayerOptionsMenu(p).o(p);
 			}
 }
 

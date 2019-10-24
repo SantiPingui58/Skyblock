@@ -104,6 +104,7 @@ public class PinguiScoreboard {
 	
 
 	 private void updateBoard(FastBoard board,CelestialPlayer cplayer) {
+		 if (cplayer.getOptions().hasScoreboardEnabled()) {
 		 String location = PlayerLocation.SPAWN.asString();
 		 if (cplayer.getLocation().equals(PlayerLocation.OTHER_PLAYER_ISLAND)) {
 				location = PlayerLocation.OTHER_PLAYER_ISLAND.asString();
@@ -130,7 +131,10 @@ public class PinguiScoreboard {
 					"§fMobCoins: §60",
 					null,
 					"   §7play.celestialmc.com");
+	    } else {
+	    	cplayer.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 	    }
+	 }
 	
 	private String getPrefix(CelestialPlayer cplayer) {
 		LuckPermsApi api = null;

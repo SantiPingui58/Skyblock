@@ -1,6 +1,6 @@
 name: CelestialCore
 main: me.santipingui58.celestialmc.Main
-version: 0.0.7
+version: 0.0.7.1
 api-version: 1.13
 commands:
     island:
@@ -21,3 +21,5 @@ commands:
     rankup:
         alies: [rank]
         description: Rank Up
+    options:
+        description: Options
