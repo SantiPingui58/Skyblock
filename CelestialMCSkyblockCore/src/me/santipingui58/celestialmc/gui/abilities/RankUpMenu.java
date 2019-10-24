@@ -258,7 +258,7 @@ public class RankUpMenu extends MenuBuilder {
 
 	@Override
 	public void onClick(Player p, ItemStack stack, int slot,InventoryClickEvent event) {
-
+		CelestialPlayer cplayer = SkyblockManager.getManager().getCelestialPlayer(p);
 		
 	}
 	
